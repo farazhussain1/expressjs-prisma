@@ -21,7 +21,14 @@ export class UserController {
 
 
     async verifyEmail(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
-        const email = req.params.email;
+        const token = req.params.token;
+        let email = ''
+        verify(token, config.SECRET_KEY, (err, payload: any) => {
+            if (err) {
+                res.status(400).json({ message: "link is expired, try again!" });
+            }
+            email = payload.email;
+        });
         try {            
             const updatedUser = await this.userService.update(email, { isVerified: true })
             if (!updatedUser) {

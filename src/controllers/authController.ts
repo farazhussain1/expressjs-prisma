@@ -38,11 +38,15 @@ export class AuthController {
       const user = await userService.create(req.body)
 
       user.password = "";
+      const token = sign({ email: user.email }, config.SECRET_KEY, {
+        expiresIn: "24h",
+      });
+
       const info = await transport.sendMail({
         from: '"Fred Foo 👻" <foo@example.com>',
         to: user.email,
         subject: "Verification ✔",
-        html: `<a href="http://localhost:4000/verify/${user.email}">Click here to verify</a>`,
+        html: `<a href="http://localhost:4000/verify/${token}">Click here to verify</a>`,
       });
 
       if (info.rejected.includes(user.email)) {
