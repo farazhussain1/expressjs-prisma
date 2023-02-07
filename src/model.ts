@@ -6,7 +6,7 @@ export interface Config {
   EMAIL_PORT: string;
   EMAIL_USER: string;
   EMAIL_PASS: string;
-  DB_CONNECTION_STRING: string;
+  DATABASE_URL: string;
 }
 export interface ForgetPassword {
   [key: string]: {
@@ -15,7 +15,3 @@ export interface ForgetPassword {
   };
 }
 
-export interface Data{
-  id?:string;
-  email?:string
-}

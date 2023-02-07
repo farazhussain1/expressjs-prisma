@@ -21,20 +21,15 @@ export class UserController {
 
 
     async verifyEmail(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
-        const id = req.params.id;
-        try {
-            const isValidMongoId = isValidObjectId(id);
-
-            if (isValidMongoId) {
-                const updatedUser = await this.userService.update({ id }, { isVerified: true })
-                if (!updatedUser) {
-                    return res.status(404).json({ message: "user didn't exists" });
-                }
-                return res
-                    .status(200)
-                    .send("<h1>Success you are verified user now</h1>");
+        const email = req.params.email;
+        try {            
+            const updatedUser = await this.userService.update(email, { isVerified: true })
+            if (!updatedUser) {
+                return res.status(404).json({ message: "user didn't exists" });
             }
-            return res.status(400).json({ message: "inValid Mongo ID" });
+            return res
+                .status(200)
+                .send("<h1>Success you are verified user now</h1>");
         } catch (err) {
             console.log(err);
 
@@ -112,7 +107,7 @@ export class UserController {
 
             const hashPassword = bcrypt.hashSync(password, 10);
 
-            const user = await this.userService.update({ email: data.email }, { password: hashPassword })
+            const user = await this.userService.update(data.email, { password: hashPassword })
             if (!user) {
                 return res.status(400).json({ message: "Password couldn't be updated, Please try again!" });
             }

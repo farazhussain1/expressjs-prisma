@@ -1,29 +1,41 @@
-import { ObjectId } from "mongoose";
-import { Data } from "./model";
-import { USER } from "./userSchema";
+import { PrismaClient, User } from "@prisma/client";
+const prisma = new PrismaClient({ log: ["query"] })
 
 export class UserService {
-    constructor() { }
+  constructor() { }
 
-    get(data: Data) {
-        return USER.findOne({ $or: [{ email: data.email }, { _id: data.id }] });
+  get(data: User) {
+    return prisma.user.findFirst({ where: { OR: [{ email: data.email }, { id: data.id }] } });
+  }
+
+  isExists(email: string) {
+    return prisma.user.findFirst({ where: { email: email } });
+  }
+
+  create(user: any) {
+    return prisma.user.create({
+      data: {
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        Profile: {
+          create: {
+            country: user.country,
+          }
+        }
+      }
     }
+    )
+  }
 
-    isExists(email: string) {
-        console.log("here");
+  delete(email: string) {
+    return prisma.user.delete({ where: { email: email } })
+  }
 
-        return USER.exists({ email })
-    }
-
-    create(data: Object) {
-        return USER.create(data);
-    }
-
-    delete(id:ObjectId) {
-        return USER.deleteOne({_id:id})
-    }
-
-    update(filter: Data,data:any) {
-        return USER.findOneAndUpdate({ $or: [{ email: filter.email }, { _id: filter.id }] },data);
-    }
-}  
+  update(email: string, data: any) {
+    return prisma.user.update({
+      where: { email: email },
+      data: data
+    })
+  }
+}

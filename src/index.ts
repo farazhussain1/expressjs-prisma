@@ -4,8 +4,8 @@ import configuration from "./config/envConfig";
 import { userRouter } from "./routes/index";
 import { config } from "dotenv"
 import cors from "cors";
-import "./config/dbConfig";
-config()
+// import "./config/dbConfig";
+// config()
 
 const port = configuration.PORT || 4000;
 

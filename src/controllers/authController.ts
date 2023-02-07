@@ -17,11 +17,7 @@ export class AuthController {
       username: JOI.string().required().min(3),
       email: JOI.string().required().email(),
       password: JOI.string().required().min(8),
-      profile: JOI.object({
-        address: JOI.object({
-          country: JOI.string().required()
-        }).required()
-      }).required()
+      country: JOI.string().required()
     }).validate(req.body, { abortEarly: true });
 
     if (validation.error) {
@@ -39,19 +35,18 @@ export class AuthController {
 
       const hashPassword = bcrypt.hashSync(password, 10);
       req.body.password = hashPassword;
-      const userObj: any = await userService.create(req.body)
-      const user = { ...userObj._doc };
-      delete user.password;
+      const user = await userService.create(req.body)
 
+      user.password = "";
       const info = await transport.sendMail({
         from: '"Fred Foo 👻" <foo@example.com>',
         to: user.email,
         subject: "Verification ✔",
-        html: `<a href="http://localhost:4000/verify/${user._id}">Click here to verify</a>`,
+        html: `<a href="http://localhost:4000/verify/${user.email}">Click here to verify</a>`,
       });
 
       if (info.rejected.includes(user.email)) {
-        userObj.delete()
+        userService.delete(email)
         return res.status(400).json({ message: "kindly check you provided valid email or not" });
       }
 
@@ -60,53 +55,48 @@ export class AuthController {
         user,
       });
     } catch (error) {
-      console.log(error);
-
       return res.status(500).json({ message: "Something went wrong" });
     }
   }
 
   async signIn(req: Request, res: Response) {
-    const { email, password } = req.body;
-    console.log(req.body);
+    const validation = JOI.object().keys({
+      email: JOI.string().required().email(),
+      password: JOI.string().required().min(8)
+    }).validate(req.body, { abortEarly: true });
+
+    if (validation.error) {
+      return res.status(400).json({ errors: validation.error.details });
+    }
+
 
     try {
+      const { email, password } = req.body;
       const userService: UserService = new UserService()
-      const user: any = await userService.get({ email })
-      console.log(user);
+      const user = await userService.get(req.body)
 
       if (!user) {
-        return res.status(400).json({ message: "Invalid Email/Password" });
+        return res.status(400).json({ message: "Invalid Email or Password" });
       }
 
       if (!user.isVerified) {
-        return res.status(404).json({
-          message:
-            "Email not verified !! You haven't verified your email plz do that first",
-        });
+        return res.status(404).json({ message: "Email not verified! You haven't verified your email." });
       }
 
       const matchPassword = bcrypt.compareSync(password, user.password);
       if (!matchPassword) {
-        return res.status(400).json({ message: "Invalid Email/Password" });
+        return res.status(400).json({ message: "Invalid Email or Password" });
       }
 
-      //TOKEN GENERATED
-      const token = sign({ email: user.email, id: user._id }, config.SECRET_KEY, {
+      const token = sign({ email: user.email, id: user.id }, config.SECRET_KEY, {
         expiresIn: "24h",
       });
 
-      const userObj = { ...user._doc };
-      delete userObj.password;
-
-      res.cookie("authorization", token, {
-        // httpOnly: true,
-        // secure: true,
-        // sameSite: "strict",
-      });
+      user.password = "";
+      res.cookie("authorization", token, { httpOnly: true, secure: true, sameSite: "strict" });
       return res.status(200).json({
         message: "Successfuly Login ",
-        user: userObj,
+        user,
       });
     } catch (error) {
       res.status(500).json({ message: "Something went wrong" });

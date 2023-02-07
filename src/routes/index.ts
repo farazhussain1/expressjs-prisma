@@ -14,7 +14,7 @@ userRouter.post("/login", auth.signIn);
 
 userRouter.post("/logout",  auth.signOut);
 
-userRouter.get("/verify/:id", user.verifyEmail.bind(user) );
+userRouter.get("/verify/:email", user.verifyEmail.bind(user) );
 
 userRouter.post("/forgotPassword", user.forgotPassword.bind(user) );
 
