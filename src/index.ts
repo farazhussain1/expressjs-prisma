@@ -1,19 +1,16 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import configuration from "./config/envConfig";
+import {envConfig} from "./config/envConfig";
 import { userRouter } from "./routes/index";
-import { config } from "dotenv"
 import cors from "cors";
-// import "./config/dbConfig";
-// config()
 
-const port = configuration.PORT || 4000;
+const port = envConfig.PORT || 4000;
 
 const app = express();
 
 app.use(cors({
-    origin: "*",
-    //  credentials: true, 
+    origin: ["*"],
+    credentials: true, 
 }));
 
 app.use(express.json());

@@ -6,7 +6,7 @@ import { v4 } from "uuid"
 import { transport } from "../config/mail.config";
 import { Request, Response } from "express";
 // import { ForgetPassword } from "../model";
-import { config } from "../config/envConfig";
+import { envConfig } from "../config/envConfig";
 import { UserService } from "../service";
 
 
@@ -23,7 +23,7 @@ export class UserController {
     async verifyEmail(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
         const token = req.params.token;
         let email = ''
-        verify(token, config.SECRET_KEY, (err, payload: any) => {
+        verify(token, envConfig.SECRET_KEY, (err, payload: any) => {
             if (err) {
                 res.status(400).json({ message: "link is expired, try again!" });
             }
@@ -38,8 +38,6 @@ export class UserController {
                 .status(200)
                 .send("<h1>Success you are verified user now</h1>");
         } catch (err) {
-            console.log(err);
-
             return res.status(500).json({ message: "something went wrong" });
         }
     }
@@ -52,8 +50,6 @@ export class UserController {
         if (validator.error) {
             return res.status(400).json({ errors: validator.error.details });
         }
-
-
         const email = req.body.email;
         const user = await this.userService.isExists(email);
         if (!user) {
@@ -66,7 +62,7 @@ export class UserController {
                 timestamp: Date.now(),
             };
 
-            const token = sign({ uuid }, config.SECRET_KEY, {
+            const token = sign({ uuid }, envConfig.SECRET_KEY, {
                 expiresIn: "180s",
             });
 
@@ -100,7 +96,7 @@ export class UserController {
         try {
             const { password } = req.body;
             let uuid = "";
-            verify(token, config.SECRET_KEY, (err, payload: any) => {
+            verify(token, envConfig.SECRET_KEY, (err, payload: any) => {
                 if (err) {
                     res.status(400).json({ message: "link is expired, try again!" });
                 }

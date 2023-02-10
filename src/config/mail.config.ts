@@ -1,12 +1,12 @@
 import { createTransport } from "nodemailer";
-import config from "./envConfig";
+import {envConfig} from "./envConfig";
 
 export const transport = createTransport({
-  host: config.EMAIL_HOST,
-  port: Number(config.EMAIL_PORT),
+  host: envConfig.EMAIL_HOST,
+  port: Number(envConfig.EMAIL_PORT),
   auth: {
-    user: config.EMAIL_USER,
-    pass: config.EMAIL_PASS
+    user: envConfig.EMAIL_USER,
+    pass: envConfig.EMAIL_PASS
   }
 });
 

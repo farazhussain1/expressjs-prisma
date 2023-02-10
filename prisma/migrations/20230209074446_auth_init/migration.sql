@@ -1,6 +1,6 @@
 -- CreateTable
-CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+CREATE TABLE "Auth"."User" (
+    "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Profile" (
+CREATE TABLE "Auth"."Profile" (
     "id" SERIAL NOT NULL,
     "number" TEXT,
     "country" TEXT NOT NULL,
@@ -22,16 +22,16 @@ CREATE TABLE "Profile" (
     "image" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "User_email_key" ON "Auth"."User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
+CREATE UNIQUE INDEX "Profile_userId_key" ON "Auth"."Profile"("userId");
 
 -- AddForeignKey
-ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Auth"."Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Auth"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

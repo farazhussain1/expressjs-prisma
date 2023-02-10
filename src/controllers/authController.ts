@@ -4,7 +4,7 @@ import JOI from "joi";
 import { transport } from "../config/mail.config";
 import { Request, Response } from "express";
 import { ForgetPassword } from "../model";
-import { config } from "../config/envConfig";
+import { envConfig } from "../config/envConfig";
 import { UserService } from "../service";
 
 
@@ -38,7 +38,7 @@ export class AuthController {
       const user = await userService.create(req.body)
 
       user.password = "";
-      const token = sign({ email: user.email }, config.SECRET_KEY, {
+      const token = sign({ email: user.email }, envConfig.SECRET_KEY, {
         expiresIn: "24h",
       });
 
@@ -92,12 +92,16 @@ export class AuthController {
         return res.status(400).json({ message: "Invalid Email or Password" });
       }
 
-      const token = sign({ email: user.email, id: user.id }, config.SECRET_KEY, {
+      const token = sign({ email: user.email, id: user.id }, envConfig.SECRET_KEY, {
         expiresIn: "24h",
       });
 
       user.password = "";
-      res.cookie("authorization", token, { httpOnly: true, secure: true, sameSite: "strict" });
+      res.cookie("authorization", token, {
+         httpOnly: true, 
+         secure: true, 
+         sameSite: "strict" 
+        });
       return res.status(200).json({
         message: "Successfuly Login ",
         user,
