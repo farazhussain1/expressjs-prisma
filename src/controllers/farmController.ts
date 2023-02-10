@@ -1,0 +1,75 @@
+import JOI from "joi";
+import { Request, Response } from "express";
+import { FarmService } from "../service";
+
+export class FarmController {
+
+  constructor(private farmService: FarmService = new FarmService()) { }
+
+  async get(req: Request, res: Response) {
+    try {
+      const farms = await this.farmService.get(req.userId);
+      return res.status(200).json(farms);
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong" });
+    }
+  }
+
+  async getById(req: Request, res: Response) {
+    try {
+      const farms = await this.farmService.getById(req.userId, Number(req.params.farmId));
+      return res.status(200).json(farms);
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong" });
+    }
+  }
+
+  async create(req: Request, res: Response) {
+ 
+    const validator = JOI.object().keys({
+      title: JOI.string().required(),
+      description: JOI.string().optional(),
+      image: JOI.string().optional(),
+      country: JOI.string().required(),
+      province: JOI.string().required(),
+      district: JOI.string().required(),
+      area: JOI.string().required()
+    }).validate(req.body, { abortEarly: true })
+    if (validator.error) {
+      return res.status(400).json({ error: validator.error.details })
+    }
+    try {
+      req.body.user_id = req.userId;
+      const farm = await this.farmService.create(req.body);
+      return res.status(200).json({ message: "New Farm Created!", farm });
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong" });
+    }
+  }
+
+  async update(req: Request, res: Response) {
+    try {
+      const farm = await this.farmService.update(Number(req.params.farmId), req.userId, req.body)
+      farm.count
+        ? res.status(200).json({ message: "Farm Updated!" })
+        : res.status(400).json({ message: "Couldn't Update!" });
+      return res;
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong" });
+    }
+  }
+
+  async delete(req: Request, res: Response) {
+    try {
+      const farm = await this.farmService.delete(Number(req.params.farmId), req.userId)
+      farm.count
+        ? res.status(200).json({ message: "Farm Deleted!" })
+        : res.status(400).json({ message: "Couldn't Deleted!" });
+      return res;
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong" });
+    }
+  }
+
+}
+

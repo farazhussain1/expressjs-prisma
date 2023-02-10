@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas = ["Farm"]
+}
+
+model Farm {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  title       String
+  description String?
+  image       String?
+  country     String
+  province    String
+  district    String
+  area        String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@schema("Farm")
+}
