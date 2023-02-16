@@ -98,9 +98,9 @@ export class AuthController {
 
       user.password = "";
       res.cookie("authorization", token, {
-         httpOnly: true, 
-         secure: true, 
-         sameSite: "strict" 
+        //  httpOnly: true, 
+        //  secure: true, 
+        //  sameSite: "strict" 
         });
       return res.status(200).json({
         message: "Successfuly Login ",
