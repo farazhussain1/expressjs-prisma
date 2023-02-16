@@ -18,7 +18,7 @@ export interface ForgetPassword {
 
 declare module "express-serve-static-core" {
   interface Request {
-    userId: number
+    userId: number;
   }
 }
 

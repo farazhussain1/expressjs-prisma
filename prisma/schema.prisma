@@ -2,14 +2,14 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas = ["Farm"]
+  schemas  = ["Farm"]
 }
 
 model Farm {
@@ -24,6 +24,35 @@ model Farm {
   area        String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  Cattle      Cattle[]
+
+  @@schema("Farm")
+}
+
+model Cattle {
+  id               Int          @id @default(autoincrement())
+  dob              DateTime
+  gender           String
+  breed            String
+  current_status   String
+  no_of_Deliveries Int
+  created_at       DateTime     @default(now())
+  updated_at       DateTime     @updatedAt
+  Farm             Farm         @relation(fields: [farm_id], references: [id])
+  farm_id          Int
+  Milk_Yield       Milk_Yield[]
+
+  @@schema("Farm")
+}
+
+model Milk_Yield {
+  id         Int      @id @default(autoincrement())
+  cattle_id  Int
+  quantity   Decimal
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Cattle     Cattle   @relation(fields: [cattleId], references: [id])
+  cattleId   Int
 
   @@schema("Farm")
 }

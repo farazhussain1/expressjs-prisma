@@ -1,6 +1,6 @@
 import JOI from "joi";
 import { Request, Response } from "express";
-import { FarmService } from "../service";
+import { FarmService } from "./service";
 
 export class FarmController {
 
@@ -17,15 +17,17 @@ export class FarmController {
 
   async getById(req: Request, res: Response) {
     try {
-      const farms = await this.farmService.getById(req.userId, Number(req.params.farmId));
-      return res.status(200).json(farms);
+      const farm = await this.farmService.getById(req.userId, Number(req.params.farmId));
+      if (!farm) {
+        return res.status(200).json({message:"Farm Not Found"});
+      }
+      return res.status(200).json(farm);
     } catch (error) {
       return res.status(500).json({ message: "Something went wrong" });
     }
   }
 
   async create(req: Request, res: Response) {
- 
     const validator = JOI.object().keys({
       title: JOI.string().required(),
       description: JOI.string().optional(),

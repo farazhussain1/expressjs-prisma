@@ -1,11 +1,9 @@
 import { Router } from 'express';
-import { FarmController } from '../controllers/farmController';
-// import { UserService } from '../service';
+import { FarmController } from './handler';
 
 export const farmRouter = Router()
 
 const farm = new FarmController();
-
 
 farmRouter.get("/", farm.get.bind(farm));
 

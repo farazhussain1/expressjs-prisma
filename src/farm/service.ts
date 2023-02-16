@@ -1,12 +1,10 @@
 import { PrismaClient, Farm } from "@prisma/client";
-const prisma = new PrismaClient({ log: ["query"] })
+const prisma = new PrismaClient()
 
 export class FarmService {
   constructor() { }
 
   get(userId: number) {
-    console.log(userId);
-
     return prisma.farm.findMany({
       where: {
         user_id: userId
@@ -15,7 +13,6 @@ export class FarmService {
   }
 
   getById(userId: number, farmId: number) {
-    console.log(userId)
     return prisma.farm.findFirst({
       where: {
         user_id: userId,
