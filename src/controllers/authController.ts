@@ -58,8 +58,8 @@ export class AuthController {
         message: `Your account has been created successfully! \n Verification email sent to <b> ${user.email} </b>`,
         user,
       });
-    } catch (error) {
-      return res.status(500).json({ message: "Something went wrong" });
+    } catch (error:any) {
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -106,10 +106,8 @@ export class AuthController {
         message: "Successfuly Login ",
         user,
       });
-    } catch (error) {
-      console.log(error);
-      
-      res.status(500).json({ message: "Something went wrong" });
+    } catch (error:any) {      
+      res.status(500).json({ message: error.message });
     }
   }
 
@@ -117,9 +115,8 @@ export class AuthController {
     try {
       res.cookie("authorization", "null", { maxAge: 1 });
       res.status(200).json({ message: "Logout Successfully" });
-    } catch (err) {
-      console.log(err);
-      res.status(400).json({ message: "something happened" });
+    } catch (error:any) {
+      res.status(400).json({ message: error.message });
     }
   }
 
