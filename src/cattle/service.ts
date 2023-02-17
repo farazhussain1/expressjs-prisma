@@ -36,18 +36,20 @@ export class CattleService {
     })
   }
 
-  delete(cattleId: number) {
+  delete(cattleId: number, farmId: number) {
     return prisma.cattle.deleteMany({
       where: {
-        id: cattleId
+        id: cattleId,
+        farm_id: farmId
       }
     })
   }
 
-  update(data: any, cattleId: number) {
+  update(data: any, cattleId: number, farmId: number) {
     return prisma.cattle.updateMany({
       where: {
-        id: cattleId
+        id: cattleId,
+        farm_id: farmId
       },
       data: data
     })
