@@ -43,10 +43,10 @@ export class AuthController {
       });
 
       const info = await transport.sendMail({
-        from: '"Fred Foo 👻" <foo@example.com>',
+        from: '"Support 👻" <support@cattlelog.com>',
         to: user.email,
         subject: "Verification ✔",
-        html: `<a href="http://localhost:4000/verify/${token}">Click here to verify</a>`,
+        html: `<a href="${envConfig.API_GATEWAY}/${token}">Click here to verify</a>`,
       });
 
       if (info.rejected.includes(user.email)) {

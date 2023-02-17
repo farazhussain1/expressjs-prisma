@@ -29,7 +29,7 @@ export class UserController {
             }
             email = payload.email;
         });
-        try {            
+        try {
             const updatedUser = await this.userService.update(email, { isVerified: true })
             if (!updatedUser) {
                 return res.status(404).json({ message: "user didn't exists" });
@@ -37,8 +37,8 @@ export class UserController {
             return res
                 .status(200)
                 .send("<h1>Success you are verified user now</h1>");
-        } catch (err) {
-            return res.status(500).json({ message: "something went wrong" });
+        } catch (error: any) {
+            return res.status(500).json({ message: error.message });
         }
     }
 
@@ -67,10 +67,10 @@ export class UserController {
             });
 
             let info = await transport.sendMail({
-                from: '"Fred Foo 👻" <foo@example.com>',
+                from: '"Support 👻" <support@cattlelog.com>',
                 to: email,
                 subject: "Change Password ✔",
-                html: `<a href="http://localhost:4000/changePassword/${token}">Click here to change your password</a>`,
+                html: `<a href="${envConfig.API_GATEWAY}/${token}">Click here to change your password</a>`,
             });
 
             if (info.rejected.includes(email)) {

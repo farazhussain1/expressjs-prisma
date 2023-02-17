@@ -1,4 +1,5 @@
 export interface Config {
+  API_GATEWAY: string;
   NODE_ENV: string;
   SECRET_KEY: string;
   PORT: string;
@@ -10,8 +11,7 @@ export interface Config {
 }
 export interface ForgetPassword {
   [key: string]: {
-    email: string,
-    timestamp: number,
+    email: string;
+    timestamp: number;
   };
 }
-
