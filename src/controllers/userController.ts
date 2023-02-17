@@ -70,7 +70,7 @@ export class UserController {
                 from: '"Support 👻" <support@cattlelog.com>',
                 to: email,
                 subject: "Change Password ✔",
-                html: `<a href="${envConfig.API_GATEWAY}/${token}">Click here to change your password</a>`,
+                html: `<a href="${envConfig.API_GATEWAY}/changePassword/${token}">Click here to change your password</a>`,
             });
 
             if (info.rejected.includes(email)) {

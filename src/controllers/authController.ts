@@ -46,7 +46,7 @@ export class AuthController {
         from: '"Support 👻" <support@cattlelog.com>',
         to: user.email,
         subject: "Verification ✔",
-        html: `<a href="${envConfig.API_GATEWAY}/${token}">Click here to verify</a>`,
+        html: `<a href="${envConfig.API_GATEWAY}/verify/${token}">Click here to verify</a>`,
       });
 
       if (info.rejected.includes(user.email)) {
@@ -58,7 +58,7 @@ export class AuthController {
         message: `Your account has been created successfully! \n Verification email sent to <b> ${user.email} </b>`,
         user,
       });
-    } catch (error:any) {
+    } catch (error: any) {
       return res.status(500).json({ message: error.message });
     }
   }
@@ -101,12 +101,12 @@ export class AuthController {
         //  httpOnly: true, 
         //  secure: true, 
         //  sameSite: "strict" 
-        });
+      });
       return res.status(200).json({
         message: "Successfuly Login ",
         user,
       });
-    } catch (error:any) {      
+    } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
   }
@@ -115,7 +115,7 @@ export class AuthController {
     try {
       res.cookie("authorization", "null", { maxAge: 1 });
       res.status(200).json({ message: "Logout Successfully" });
-    } catch (error:any) {
+    } catch (error: any) {
       res.status(400).json({ message: error.message });
     }
   }
