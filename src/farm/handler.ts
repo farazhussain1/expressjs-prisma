@@ -10,8 +10,8 @@ export class FarmController {
     try {
       const farms = await this.farmService.get(req.userId);
       return res.status(200).json(farms);
-    } catch (error) {
-      return res.status(500).json({ message: "Something went wrong" });
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -19,11 +19,11 @@ export class FarmController {
     try {
       const farm = await this.farmService.getById(req.userId, Number(req.params.farmId));
       if (!farm) {
-        return res.status(200).json({message:"Farm Not Found"});
+        return res.status(200).json({ message: "Farm Not Found" });
       }
       return res.status(200).json(farm);
-    } catch (error) {
-      return res.status(500).json({ message: "Something went wrong" });
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -44,8 +44,8 @@ export class FarmController {
       req.body.user_id = req.userId;
       const farm = await this.farmService.create(req.body);
       return res.status(200).json({ message: "New Farm Created!", farm });
-    } catch (error) {
-      return res.status(500).json({ message: "Something went wrong" });
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -56,8 +56,8 @@ export class FarmController {
         ? res.status(200).json({ message: "Farm Updated!" })
         : res.status(400).json({ message: "Couldn't Update!" });
       return res;
-    } catch (error) {
-      return res.status(500).json({ message: "Something went wrong" });
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -68,8 +68,8 @@ export class FarmController {
         ? res.status(200).json({ message: "Farm Deleted!" })
         : res.status(400).json({ message: "Couldn't Deleted!" });
       return res;
-    } catch (error) {
-      return res.status(500).json({ message: "Something went wrong" });
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
   }
 
