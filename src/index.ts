@@ -4,7 +4,7 @@ import {envConfig} from "./config/envConfig";
 import { userRouter } from "./routes/index";
 import cors from "cors";
 
-const port = envConfig.PORT || 4000;
+const port = process.env.PORT || 4000;
 
 const app = express();
 
@@ -19,4 +19,4 @@ app.use("/", userRouter)
 
 // app.get("/", (req, res) => res.status(200).json({ message: "Server is running and up!" }));
 
-app.listen(port, () => console.log("server is running at port " + port));
+app.listen(Number(port),"0.0.0.0", () => console.log("server is running at port " + port));
