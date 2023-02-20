@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
-import JOI from "joi";
+import JOI, { object } from "joi";
 import { transport } from "../config/mail.config";
 import { Request, Response } from "express";
 import { ForgetPassword } from "../model";
 import { envConfig } from "../config/envConfig";
 import { UserService } from "../service";
+import { error } from "../helpers/errorHelper";
 
 
 export class AuthController {
@@ -18,10 +19,15 @@ export class AuthController {
       email: JOI.string().required().email(),
       password: JOI.string().required().min(8),
       country: JOI.string().required()
-    }).validate(req.body, { abortEarly: true });
+    }).validate(req.body, { abortEarly: false });
+
+    validation.error?.details.forEach(element => {
+      console.log(element.message);
+    })
+
 
     if (validation.error) {
-      return res.status(400).json({ errors: validation.error.details });
+      return error("validationError", validation, res)
     }
 
     try {
@@ -37,7 +43,16 @@ export class AuthController {
       req.body.password = hashPassword;
       const user = await userService.create(req.body)
 
-      user.password = "";
+      const users = {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "country": req.body.country,
+        "is_verified": user.isVerified,
+        "created_at": user.created_at,
+        "updated_at": user.updated_at
+      }
+
       const token = sign({ email: user.email }, envConfig.SECRET_KEY, {
         expiresIn: "24h",
       });
@@ -56,7 +71,7 @@ export class AuthController {
 
       return res.status(200).json({
         message: `Your account has been created successfully! \n Verification email sent to <b> ${user.email} </b>`,
-        user,
+        users,
       });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
