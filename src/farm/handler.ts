@@ -1,6 +1,7 @@
 import JOI from "joi";
 import { Request, Response } from "express";
 import { FarmService } from "./service";
+import { error } from "../helpers/errorHelper";
 
 export class FarmController {
 
@@ -28,7 +29,7 @@ export class FarmController {
   }
 
   async create(req: Request, res: Response) {
-    const validator = JOI.object().keys({
+    const validation = JOI.object().keys({
       title: JOI.string().required(),
       description: JOI.string().optional(),
       image: JOI.string().optional(),
@@ -36,9 +37,10 @@ export class FarmController {
       province: JOI.string().required(),
       district: JOI.string().required(),
       area: JOI.string().required()
-    }).validate(req.body, { abortEarly: true })
-    if (validator.error) {
-      return res.status(400).json({ error: validator.error.details })
+    }).validate(req.body, { abortEarly: false })
+    if (validation.error) {
+      return error("validationError", validation, res)
+      // return res.status(400).json({ error: validator.error.details })
     }
     try {
       req.body.user_id = req.userId;
