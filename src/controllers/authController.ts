@@ -25,7 +25,6 @@ export class AuthController {
       console.log(element.message);
     })
 
-
     if (validation.error) {
       return error("validationError", validation, res)
     }
@@ -41,16 +40,16 @@ export class AuthController {
 
       const hashPassword = bcrypt.hashSync(password, 10);
       req.body.password = hashPassword;
-      const user = await userService.create(req.body)
+      const userReturn = await userService.create(req.body)
 
-      const users = {
-        "id": user.id,
-        "username": user.username,
-        "email": user.email,
+      const user = {
+        "id": userReturn.id,
+        "username": userReturn.username,
+        "email": userReturn.email,
         "country": req.body.country,
-        "is_verified": user.isVerified,
-        "created_at": user.created_at,
-        "updated_at": user.updated_at
+        "is_verified": userReturn.isVerified,
+        "created_at": userReturn.created_at,
+        "updated_at": userReturn.updated_at
       }
 
       const token = sign({ email: user.email }, envConfig.SECRET_KEY, {
@@ -71,7 +70,7 @@ export class AuthController {
 
       return res.status(200).json({
         message: `Your account has been created successfully! \n Verification email sent to <b> ${user.email} </b>`,
-        users,
+        user,
       });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
@@ -82,41 +81,53 @@ export class AuthController {
     const validation = JOI.object().keys({
       email: JOI.string().required().email(),
       password: JOI.string().required().min(8)
-    }).validate(req.body, { abortEarly: true });
+    }).validate(req.body, { abortEarly: false });
 
     if (validation.error) {
-      return res.status(400).json({ errors: validation.error.details });
+      return error("validationError", validation, res)
     }
-
 
     try {
       const { email, password } = req.body;
       const userService: UserService = new UserService()
-      const user = await userService.get(req.body)
+      const users = await userService.get(req.body)
 
-      if (!user) {
+      if (!users) {
         return res.status(400).json({ message: "Invalid Email or Password" });
       }
 
-      if (!user.isVerified) {
+      if (!users.isVerified) {
         return res.status(404).json({ message: "Email not verified! You haven't verified your email." });
       }
 
-      const matchPassword = bcrypt.compareSync(password, user.password);
+      const matchPassword = bcrypt.compareSync(password, users.password);
       if (!matchPassword) {
         return res.status(400).json({ message: "Invalid Email or Password" });
       }
 
-      const token = sign({ email: user.email, id: user.id }, envConfig.SECRET_KEY, {
+      const token = sign({ email: users.email, id: users.id }, envConfig.SECRET_KEY, {
         expiresIn: "24h",
       });
 
-      user.password = "";
+      const profile = await userService.getProfile(users.id);
+      console.log(profile);
+
+      const user = {
+        "id": users.id,
+        "username": users.username,
+        "email": users.email,
+        "country": profile?.country,
+        "is_verified": users.isVerified,
+        "created_at": users.created_at,
+        "updated_at": users.updated_at
+      }
+
       res.cookie("authorization", token, {
         //  httpOnly: true, 
         //  secure: true, 
         //  sameSite: "strict" 
       });
+
       return res.status(200).json({
         message: "Successfuly Login ",
         user,

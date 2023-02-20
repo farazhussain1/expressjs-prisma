@@ -5,7 +5,11 @@ export class UserService {
   constructor() { }
 
   get(data: User) {
-    return prisma.user.findFirst({ where: { OR: [{ email: data.email }, { id: data.id }] } });
+    return prisma.user.findFirst({ where: { OR: [{ email: data.email }, { id: data.id }]} });
+  }
+  getProfile(userId:number){
+    return prisma.profile.findFirst({where: { userId: userId}})
+
   }
 
   isExists(email: string) {
