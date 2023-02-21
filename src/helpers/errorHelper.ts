@@ -5,7 +5,7 @@ export function error(type: "validationError" | "catchError", error: any, res: R
         return res.status(500).json({ message: error.message })
     } if (type == "validationError") {
         const errors = error.error.details.map((error: any) => error.message)
-        return res.status(400).json({ message: "Validation Errors.", errors })
+        return res.status(400).json({ message: "Required * fields are missing", errors })
     }
     return res;
 }

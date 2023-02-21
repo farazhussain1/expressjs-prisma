@@ -1,6 +1,7 @@
 import JOI from "joi";
 import { Request, Response } from "express";
 import { CattleService } from "./service";
+import { error } from "../helpers/errorHelper";
 
 export class CattleHandler {
 
@@ -33,7 +34,7 @@ export class CattleHandler {
   }
 
   async create(req: Request, res: Response) {
-    const validator = JOI.object().keys({
+    const validation = JOI.object().keys({
       farm_id: JOI.number().required(),
       dob: JOI.date().iso().required(),
       gender: JOI.string().required(),
@@ -41,9 +42,11 @@ export class CattleHandler {
       current_status: JOI.string().required(),
       no_of_Deliveries: JOI.number().required(),
     }).validate(req.body, { abortEarly: true })
-    if (validator.error) {
-      return res.status(400).json({ error: validator.error.details })
+    if (validation.error) {
+      return error("validationError", validation, res)
+      // return res.status(400).json({ error: validator.error.details })
     }
+    
     try {
       const isFarm = await this.cattleService.isUserFarms(req.body.farm_id, req.userId)
       if (!isFarm) {
