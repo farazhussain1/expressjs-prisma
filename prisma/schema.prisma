@@ -25,6 +25,7 @@ model Farm {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   Cattle      Cattle[]
+  Ration      Ration[]
 
   @@schema("Farm")
 }
@@ -53,6 +54,21 @@ model Milk_Yield {
   updated_at DateTime @updatedAt
   Cattle     Cattle   @relation(fields: [cattleId], references: [id])
   cattleId   Int
+
+  @@schema("Farm")
+}
+
+model Ration {
+  id                 Int      @id @default(autoincrement())
+  ration_name        String
+  kilograms          Int
+  purchase_date      DateTime
+  approx_daily_usage Int?
+  month              String
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+  Farm               Farm     @relation(fields: [farm_id], references: [id])
+  farm_id            Int
 
   @@schema("Farm")
 }
