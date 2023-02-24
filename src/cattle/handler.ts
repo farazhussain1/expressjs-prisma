@@ -9,7 +9,7 @@ export class CattleHandler {
 
   async get(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farmId ?? 0)
+      const farmId = +(req.query.farm_id ?? 0)
 
       const isFarms = await this.cattleService.isUserFarms(farmId, req.userId)
       if (!isFarms) {
@@ -25,7 +25,7 @@ export class CattleHandler {
 
   async getById(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farmId ?? 0)
+      const farmId = +(req.query.farm_id ?? 0)
       const cattle = await this.cattleService.getById(+(req.params.id), farmId);
       return res.status(200).json(cattle);
     } catch (error: any) {
@@ -64,7 +64,7 @@ export class CattleHandler {
 
   async update(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farmId ?? 0)
+      const farmId = +(req.query.farm_id ?? 0)
       const isFarm = await this.cattleService.isUserFarms(farmId, req.userId)
       if (!isFarm) {
         return res.status(400).json({ message: "invalid Farm" })
@@ -82,7 +82,7 @@ export class CattleHandler {
 
   async delete(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farmId ?? 0)
+      const farmId = +(req.query.farm_id ?? 0)
       const isFarm = await this.cattleService.isUserFarms(farmId, req.userId)
       if (!isFarm) {
         return res.status(400).json({ message: "invalid Farm" })
