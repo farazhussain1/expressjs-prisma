@@ -20,7 +20,7 @@ export class FarmController {
     try {
       const farm = await this.farmService.getById(req.userId, Number(req.params.farmId));
       if (!farm) {
-        return res.status(200).json({ message: "Farm Not Found" });
+        return res.status(404).json({ message: "Farm Not Found" });
       }
       return res.status(200).json(farm);
     } catch (error: any) {

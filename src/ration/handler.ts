@@ -26,8 +26,11 @@ export class RationHandler {
   async getById(req: Request, res: Response) {
     try {
       const farmId = +(req.query.farm_id ?? 0)
-      const cattle = await this.rationService.getById(+(req.params.id), farmId);
-      return res.status(200).json(cattle);
+      const ration = await this.rationService.getById(+(req.params.id), farmId);
+      if (!ration) {
+        return res.status(404).json({ message: "Ration Not Found" });
+      }
+      return res.status(200).json(ration);
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
     }

@@ -27,6 +27,9 @@ export class CattleHandler {
     try {
       const farmId = +(req.query.farm_id ?? 0)
       const cattle = await this.cattleService.getById(+(req.params.id), farmId);
+      if (!cattle) {
+        return res.status(404).json({ message: "Cattle Not Found" });
+      }
       return res.status(200).json(cattle);
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
