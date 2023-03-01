@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: develop
+  labels:
+    io.kompose.service: cattlelog-farm
+  name: cattlelog-farm
+spec:
+  ports:
+    - name: "8011"
+      port: 8011
+      targetPort: 8011
+  selector:
+    io.kompose.service: cattlelog-farm
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: develop
+  labels:
+    io.kompose.service: cattlelog-farm
+  name: cattlelog-farm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cattlelog-farm
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: cattlelog-farm
+    spec:
+      containers:
+        - command: [bash]           
+          args:
+          - -c
+          - |
+            npm start
+          name: cattlelog-farm
+          image: acragview.azurecr.io/cattlelog-farm:v1
+          imagePullPolicy: Always
+          # resources:
+          # requests:
+          #   cpu: 30m
+          #   memory: 100Mi
+          #  limits:
+          #   cpu: 50m
+          #   memory: 200Mi
+          ports:
+            - containerPort: 8011
+      restartPolicy: Always
