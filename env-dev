@@ -1,0 +1,7 @@
+SECRET_KEY=secret
+
+PORT=8011
+
+NODE_ENV=[devlopment, production]
+
+DATABASE_URL=host=postgresql-cattlelog-dev.postgres.database.azure.com port=5432 dbname=cattlelog_farm user=cattlelogadmin@postgresql-cattlelog-dev password=A4723nSWNWk8bqkN sslmode=require
