@@ -7,11 +7,12 @@ WORKDIR /app
 # Copy the package.json and package-lock.json files to the container
 COPY package*.json ./
 
-
-RUN npx prisma migrate deploy
-
 # Install the app's dependencies
 RUN npm install
+
+RUN npm install -g npx
+
+RUN npx prisma migrate deploy
 
 # Copy the rest of the app's files to the container
 COPY . .
