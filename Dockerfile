@@ -10,7 +10,7 @@ COPY package*.json ./
 # Install the app's dependencies
 RUN npm install
 
-RUN npm install -g npx
+#RUN npm install -g npx
 
 RUN npx prisma migrate deploy
 
