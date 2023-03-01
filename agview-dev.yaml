@@ -40,7 +40,7 @@ spec:
           - |
             npm start
           name: cattlelog-farm
-          image: acragview.azurecr.io/cattlelog-farm:v1
+          image: acragview.azurecr.io/cattlelog-farm-dev:v1
           imagePullPolicy: Always
           # resources:
           # requests:
