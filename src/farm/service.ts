@@ -7,7 +7,7 @@ export class FarmService {
   get(userId: number) {
     return prisma.farm.findMany({
       where: {
-        user_id: userId
+        userId: userId
       }
     })
   }
@@ -15,7 +15,7 @@ export class FarmService {
   getById(userId: number, farmId: number) {
     return prisma.farm.findFirst({
       where: {
-        user_id: userId,
+        userId: userId,
         id: farmId
       }
     })
@@ -31,7 +31,7 @@ export class FarmService {
     return prisma.farm.deleteMany({
       where: {
         id: farmId,
-        user_id: userId
+        userId: userId
       }
     })
   }
@@ -40,7 +40,7 @@ export class FarmService {
     return prisma.farm.updateMany({
       where: {
         id: farmId,
-        user_id: userId
+        userId: userId
       },
       data: data
     })

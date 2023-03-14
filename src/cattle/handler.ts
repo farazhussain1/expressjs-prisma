@@ -37,27 +37,35 @@ export class CattleHandler {
   }
 
   async create(req: Request, res: Response) {
+    console.log(req.body);
+    
     const validation = JOI.object().keys({
-      farm_id: JOI.number().required(),
-      dob: JOI.date().iso().required(),
+      farmId: JOI.number().required(),
+      idNumber: JOI.number().required(),
       gender: JOI.string().required(),
       breed: JOI.string().required(),
-      current_status: JOI.string().required(),
-      no_of_Deliveries: JOI.number().required(),
+      dob: JOI.date().iso().required(),
+      age: JOI.number(),
+      status: JOI.string().required(),
+      vaccinated: JOI.boolean().required(),
+      image: JOI.optional(),
     }).validate(req.body, { abortEarly: true })
     if (validation.error) {
       return error("validationError", validation, res)
-      // return res.status(400).json({ error: validator.error.details })
     }
+
     
     try {
-      const isFarm = await this.cattleService.isUserFarms(req.body.farm_id, req.userId)
+      const isFarm = await this.cattleService.isUserFarms(+req.body.farmId, req.userId)
       if (!isFarm) {
         return res.status(400).json({ message: "invalid Farm" })
       }
+      
+      req.body.image = "cattleImg/"+req.file?.filename 
+      req.body.farmId = +req.body.farmId
+      req.body.age = +req.body.age
+      req.body.vaccinated = Boolean(req.body.vaccinated)
 
-      req.body.dob = new Date(req.body.dob);
-      console.log(req.body.dob)
       const cattle = await this.cattleService.create(req.body, req.userId);
       return res.status(200).json({ message: "Cattle Added!", cattle });
     } catch (error: any) {

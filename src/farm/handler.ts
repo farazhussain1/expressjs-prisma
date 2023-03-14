@@ -28,25 +28,26 @@ export class FarmController {
     }
   }
 
-  async create(req: Request, res: Response) {
+  async create(req: Request, res: Response) {    
     const validation = JOI.object().keys({
-      title: JOI.string().required(),
-      description: JOI.string().optional(),
-      image: JOI.string().optional(),
+      farmName: JOI.string().required(),
       country: JOI.string().required(),
       province: JOI.string().required(),
-      district: JOI.string().required(),
-      area: JOI.string().required()
+      area: JOI.string().required(),
+      location: JOI.string().required()
     }).validate(req.body, { abortEarly: false })
     if (validation.error) {
       return error("validationError", validation, res)
       // return res.status(400).json({ error: validator.error.details })
     }
     try {
-      req.body.user_id = req.userId;
+      req.body.userId = req.userId;
+      console.log("here");
+      
       const farm = await this.farmService.create(req.body);
       return res.status(200).json({ message: "New Farm Created!", farm });
     } catch (error: any) {
+      console.log(error)
       return res.status(500).json({ message: error.message });
     }
   }
@@ -66,6 +67,8 @@ export class FarmController {
   async delete(req: Request, res: Response) {
     try {
       const farm = await this.farmService.delete(Number(req.params.farmId), req.userId)
+      console.log(farm);
+      
       farm.count
         ? res.status(200).json({ message: "Farm Deleted!" })
         : res.status(400).json({ message: "Couldn't Deleted!" });

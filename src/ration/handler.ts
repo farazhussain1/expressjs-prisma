@@ -38,16 +38,13 @@ export class RationHandler {
 
   async create(req: Request, res: Response) {
     const validation = JOI.object().keys({
-      farm_id: JOI.number().required(),
-      ration_name: JOI.string().required(),
+      farmId: JOI.number().required(),
+      rationCategory: JOI.string().required(),
       kilograms: JOI.number().required(),
-      purchase_date: JOI.date().iso().required(),
-      approx_daily_usage: JOI.number().required(),
-      month: JOI.string().required(),
+      purchaseDate: JOI.date().iso().required()
     }).validate(req.body, { abortEarly: false })
     if (validation.error) {
       return error("validationError", validation, res)
-      // return res.status(400).json({ error: validator.error.details })
     }
 
     try {
@@ -56,8 +53,6 @@ export class RationHandler {
         return res.status(400).json({ message: "invalid Farm" })
       }
 
-      req.body.purchase_date = new Date(req.body.purchase_date);
-      console.log(req.body.purchase_date);
       const ration = await this.rationService.create(req.body);
       return res.status(200).json({ message: "Retained Ration !!", ration });
     } catch (error: any) {

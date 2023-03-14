@@ -4,11 +4,11 @@ const prisma = new PrismaClient()
 export class RationService {
   constructor() { }
 
-  isUserFarms(farm_id: number, user_id: number) {
+  isUserFarms(farmId: number, userId: number) {
     return prisma.farm.findFirst({
       where: {
-        id: farm_id,
-        user_id: user_id
+        id: farmId,
+        userId: userId
       }
     })
   }
@@ -16,7 +16,7 @@ export class RationService {
   get(farmId: number) {
     return prisma.ration.findMany({
       where: {
-        farm_id: farmId
+        farmId: farmId
       }
     })
   }
@@ -25,7 +25,7 @@ export class RationService {
     return prisma.ration.findFirst({
       where: {
         id,
-        farm_id: farmId
+        farmId: farmId
       }
     })
   }
@@ -35,24 +35,5 @@ export class RationService {
       data: ration
     })
   }
-
-  // delete(cattleId: number, farmId: number) {
-  //   return prisma.cattle.deleteMany({
-  //     where: {
-  //       id: cattleId,
-  //       farm_id: farmId
-  //     }
-  //   })
-  // }
-
-  // update(data: any, cattleId: number, farmId: number) {
-  //   return prisma.cattle.updateMany({
-  //     where: {
-  //       id: cattleId,
-  //       farm_id: farmId
-  //     },
-  //     data: data
-  //   })
-  // }
-
+  
 }

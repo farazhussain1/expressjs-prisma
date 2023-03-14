@@ -13,62 +13,70 @@ datasource db {
 }
 
 model Farm {
-  id          Int      @id @default(autoincrement())
-  user_id     Int
-  title       String
-  description String?
-  image       String?
-  country     String
-  province    String
-  district    String
-  area        String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  Cattle      Cattle[]
-  Ration      Ration[]
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  farmName  String
+  country   String
+  province  String
+  area      String
+  location  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Cattle    Cattle[]
+  Ration    Ration[]
 
   @@schema("Farm")
 }
 
 model Cattle {
-  id               Int          @id @default(autoincrement())
-  dob              DateTime
-  gender           String
-  breed            String
-  current_status   String
-  no_of_Deliveries Int
-  created_at       DateTime     @default(now())
-  updated_at       DateTime     @updatedAt
-  Farm             Farm         @relation(fields: [farm_id], references: [id])
-  farm_id          Int
-  Milk_Yield       Milk_Yield[]
+  id         Int         @id @default(autoincrement())
+  farmId     Int
+  idNumber   String
+  gender     String
+  breed      String
+  dob        DateTime
+  age        Int
+  status     String
+  vaccinated Boolean
+  image      String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  Farm       Farm        @relation(fields: [farmId], references: [id])
+  MilkYield  MilkYield[]
 
   @@schema("Farm")
 }
 
-model Milk_Yield {
-  id         Int      @id @default(autoincrement())
-  cattle_id  Int
-  quantity   Decimal
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Cattle     Cattle   @relation(fields: [cattleId], references: [id])
-  cattleId   Int
+model MilkYield {
+  id            Int      @id @default(autoincrement())
+  cattleId      Int
+  milkInLitres  Decimal
+  milkYieldDate DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Cattle        Cattle   @relation(fields: [cattleId], references: [id])
 
   @@schema("Farm")
 }
 
 model Ration {
-  id                 Int      @id @default(autoincrement())
-  ration_name        String
-  kilograms          Int
-  purchase_date      DateTime
-  approx_daily_usage Int?
-  month              String
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
-  Farm               Farm     @relation(fields: [farm_id], references: [id])
-  farm_id            Int
+  id             Int            @id @default(autoincrement())
+  farmId         Int
+  rationCategory RationCategory
+  kilograms      Int
+  purchaseDate   DateTime
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  Farm           Farm           @relation(fields: [farmId], references: [id])
+
+  @@schema("Farm")
+}
+
+enum RationCategory {
+  grainMix
+  hay
+  cornSillage
+  water
 
   @@schema("Farm")
 }
