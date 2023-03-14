@@ -2,14 +2,14 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas = ["Auth"]
+  schemas  = ["Auth"]
 }
 
 // User Info
@@ -20,26 +20,25 @@ model User {
   email      String   @unique
   password   String
   isVerified Boolean  @default(false)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   Profile    Profile?
 
   @@schema("Auth")
 }
 
 model Profile {
-  id         Int      @id @default(autoincrement())
-  number     String?
-  country    String
-  state      String?
-  city       String?
-  district   String?
-  image      String?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  userId     Int      @unique
+  id        Int      @id @default(autoincrement())
+  number    String?
+  country   String
+  state     String?
+  city      String?
+  district  String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    Int      @unique
 
   @@schema("Auth")
-
 }

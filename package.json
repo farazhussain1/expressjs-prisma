@@ -9,7 +9,7 @@
     "build": "npx ttsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "Faraz Hussain",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^4.9.0",
