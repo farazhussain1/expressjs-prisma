@@ -13,6 +13,8 @@ export class AuthController {
   protected forgetPasswordData: ForgetPassword = {};
 
   async signUp(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
+    console.log("router",req.body);
+    
 
     const validation = JOI.object().keys({
       username: JOI.string().required().min(3),
@@ -42,16 +44,6 @@ export class AuthController {
       req.body.password = hashPassword;
       const user = await userService.create(req.body)
 
-      const userObj = {
-        "id": user.id,
-        "username": user.username,
-        "email": user.email,
-        "country": req.body.country,
-        "is_verified": user.isVerified,
-        "created_at": user.created_at,
-        "updated_at": user.updated_at
-      }
-
       const token = sign({ email: user.email }, envConfig.SECRET_KEY, {
         expiresIn: "24h",
       });
@@ -70,7 +62,7 @@ export class AuthController {
 
       return res.status(200).json({
         message: `Your account has been created successfully! \n Verification email sent to <b> ${user.email} </b>`,
-        user: userObj,
+        user,
       });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
@@ -78,6 +70,7 @@ export class AuthController {
   }
 
   async signIn(req: Request, res: Response) {
+    console.log(req.body);
     const validation = JOI.object().keys({
       email: JOI.string().required().email(),
       password: JOI.string().required().min(8)
@@ -86,6 +79,7 @@ export class AuthController {
     if (validation.error) {
       return error("validationError", validation, res)
     }
+    
 
     try {
       const { email, password } = req.body;
@@ -109,16 +103,6 @@ export class AuthController {
         expiresIn: "24h",
       });
 
-      const userObj = {
-        "id": user.id,
-        "username": user.username,
-        "email": user.email,
-        "country": user.Profile?.country,
-        "is_verified": user.isVerified,
-        "created_at": user.created_at,
-        "updated_at": user.updated_at
-      }
-
       res.cookie("authorization", token, {
         //  httpOnly: true, 
         //  secure: true, 
@@ -127,7 +111,7 @@ export class AuthController {
 
       return res.status(200).json({
         message: "Successfuly Login ",
-        user: userObj,
+        user
       });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
