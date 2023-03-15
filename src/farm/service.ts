@@ -8,7 +8,8 @@ export class FarmService {
     return prisma.farm.findMany({
       where: {
         userId: userId
-      }
+      },
+      include: { Cattle: true, _count: true }
     })
   }
 

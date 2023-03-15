@@ -2,6 +2,12 @@ import JOI from "joi";
 import { Request, Response } from "express";
 import { CattleService } from "./service";
 import { error } from "../helpers/errorHelper";
+import formidable from "formidable";
+import multer from "multer";
+import storage from "../middleware/multerUpload";
+import { uploadFile } from "../helpers/formidable";
+
+const upload = multer({ storage: storage });
 
 export class CattleHandler {
 
@@ -37,8 +43,11 @@ export class CattleHandler {
   }
 
   async create(req: Request, res: Response) {
+
+    req.body = await uploadFile(req, "public/cattleImg")
     console.log(req.body);
-    
+
+
     const validation = JOI.object().keys({
       farmId: JOI.number().required(),
       idNumber: JOI.number().required(),
@@ -54,14 +63,13 @@ export class CattleHandler {
       return error("validationError", validation, res)
     }
 
-    
+
     try {
       const isFarm = await this.cattleService.isUserFarms(+req.body.farmId, req.userId)
       if (!isFarm) {
         return res.status(400).json({ message: "invalid Farm" })
       }
-      
-      req.body.image = "cattleImg/"+req.file?.filename 
+
       req.body.farmId = +req.body.farmId
       req.body.age = +req.body.age
       req.body.vaccinated = Boolean(req.body.vaccinated)
