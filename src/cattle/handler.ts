@@ -44,9 +44,9 @@ export class CattleHandler {
 
   async create(req: Request, res: Response) {
 
-    req.body = await uploadFile(req, "public/cattleImg")
+    // console.log("here");
+    // req.body = await uploadFile(req, "public/cattleImg")
     console.log(req.body);
-
 
     const validation = JOI.object().keys({
       farmId: JOI.number().required(),
