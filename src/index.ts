@@ -1,6 +1,5 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import { envConfig } from "./config/envConfig";
 import { userRouter } from "./routes/index";
 import cors from "cors";
 
@@ -16,6 +15,6 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/", userRouter)
+app.use("/api/auth", userRouter)
 
 app.listen(Number(port), '0.0.0.0', () => console.log("server is running at port " + port));
