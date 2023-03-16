@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
-import JOI, { object } from "joi";
+import JOI, { any, object } from "joi";
 import { transport } from "../config/mail.config";
 import { Request, Response } from "express";
 import { ForgetPassword } from "../model";
@@ -13,8 +13,8 @@ export class AuthController {
   protected forgetPasswordData: ForgetPassword = {};
 
   async signUp(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
-    console.log("router",req.body);
-    
+    console.log("router", req.body);
+
 
     const validation = JOI.object().keys({
       username: JOI.string().required().min(3),
@@ -79,12 +79,12 @@ export class AuthController {
     if (validation.error) {
       return error("validationError", validation, res)
     }
-    
+
 
     try {
       const { email, password } = req.body;
       const userService: UserService = new UserService()
-      const user = await userService.get(req.body)
+      const user:any = await userService.get(req.body)
 
       if (!user) {
         return res.status(400).json({ message: "Invalid Email or Password" });
@@ -109,6 +109,8 @@ export class AuthController {
         //  sameSite: "strict" 
       });
 
+      user['country'] = user.Profile?.country
+      delete user.Profile
       return res.status(200).json({
         message: "Successfuly Login ",
         user
