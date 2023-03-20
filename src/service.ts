@@ -9,7 +9,7 @@ export class UserService {
       where: {
         OR: [{ email: data.email }, { id: data.id }]
       },
-      select: { id: true, username: true, email: true, isVerified: true, createdAt: true, updatedAt: true, Profile: { select: { country: true } } }
+      select: { id: true, username: true, email: true, password: true, isVerified: true, createdAt: true, updatedAt: true, Profile: { select: { country: true } } }
     });
   }
 

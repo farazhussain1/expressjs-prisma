@@ -111,6 +111,7 @@ export class AuthController {
 
       user['country'] = user.Profile?.country
       delete user.Profile
+      delete user.password
       return res.status(200).json({
         message: "Successfuly Login ",
         user
