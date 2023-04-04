@@ -26,4 +26,4 @@ app.get("/", (req, res) => res.status(200).json({ message: "Server is running an
 app.use(AuthMap)
 app.use('/api/farms', apiRouter)
 
-app.listen(Number(port), () => console.log("server is running at port " + port));
+app.listen(Number(port),'0.0.0.0', () => console.log("server is running at port " + port));
