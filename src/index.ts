@@ -17,4 +17,4 @@ app.use(cookieParser());
 
 app.use("/api/auth", userRouter)
 
-app.listen(Number(port), '0.0.0.0', () => console.log("server is running at port " + port));
+app.listen(Number(port), () => console.log("server is running at port " + port));
