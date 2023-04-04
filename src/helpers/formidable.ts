@@ -11,21 +11,20 @@ export function uploadFile(req: Request, uploadPath: string) {
         const originalName: any = part.originalFilename
         return `${Date.now()}_${originalName}`
       },
-    });
-
+    })
     return new Promise((resolve, reject) => {
       form.parse(req, (err, fields, files: Files) => {
-        if (!err) {
+        if (err) {
+          reject(err)
+        }
+        if (Object.keys(files).length) {
           const image: any = files.image
-          // if(Array.isArray(files)){
-          //      const allFiles = files.map((file)=> Object.keys(file)[0])
-          // }
           resolve({ ...fields, [Object.keys(files)[0]]: image.newFilename })
         }
-        reject(err)
+        resolve(fields)
       });
     })
   } catch (error: any) {
-    console.log(error.message);
+    throw error
   }
 }

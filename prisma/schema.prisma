@@ -38,7 +38,7 @@ model Cattle {
   age        Int
   status     String
   vaccinated Boolean
-  image      String
+  image      String?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   Farm       Farm        @relation(fields: [farmId], references: [id])

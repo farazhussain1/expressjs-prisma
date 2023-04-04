@@ -49,6 +49,8 @@ export class RationHandler {
 
     try {
       const isFarm = await this.rationService.isUserFarms(req.body.farm_id, req.userId)
+      console.log(isFarm);
+      
       if (!isFarm) {
         return res.status(400).json({ message: "invalid Farm" })
       }

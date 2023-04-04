@@ -43,8 +43,6 @@ export class CattleHandler {
   }
 
   async create(req: Request, res: Response) {
-
-    console.log("here");
     try {
       req.body = await uploadFile(req, "public/cattleImg")
     } catch (error) {
