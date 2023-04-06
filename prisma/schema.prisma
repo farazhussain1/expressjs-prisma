@@ -63,7 +63,7 @@ model Ration {
   id             Int            @id @default(autoincrement())
   farmId         Int
   rationCategory RationCategory
-  kilograms      Int
+  quantity       Int
   purchaseDate   DateTime
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt

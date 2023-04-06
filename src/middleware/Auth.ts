@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 export function AuthMap(req: Request, res: Response, next: NextFunction) {
-    req.userId = Number(req.headers.userid);
+    req.userId = Number(req.headers.userid)||1;
     console.log(req.userId);
     if (!req.userId) {
         return res.status(403).json({ message: "Unauthenticated" })

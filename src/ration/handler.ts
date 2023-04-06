@@ -40,7 +40,7 @@ export class RationHandler {
     const validation = JOI.object().keys({
       farmId: JOI.number().required(),
       rationCategory: JOI.string().required(),
-      kilograms: JOI.number().required(),
+      quantity: JOI.number().required(),
       purchaseDate: JOI.date().iso().required()
     }).validate(req.body, { abortEarly: false })
     if (validation.error) {
