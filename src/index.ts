@@ -11,19 +11,25 @@ import { apiRouter } from "./routes";
 const port = process.env.PORT || 4000;
 
 const app = express();
-app.use(express.static('public'))
-app.use(cors({
+app.use(express.static("public"));
+app.use(
+  cors({
     origin: "*",
-    //  credentials: true, 
-}));
+    //  credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => res.status(200).json({ message: "Server is running and up!" }));
+app.get("/", (req, res) =>
+  res.status(200).json({ message: "Server is running and up!" })
+);
 
-app.use(AuthMap)
-app.use('/api/farms', apiRouter)
+app.use(AuthMap);
+app.use("/api/farms", apiRouter);
 
-app.listen(Number(port),'0.0.0.0', () => console.log("server is running at port " + port));
+app.listen(Number(port), "0.0.0.0", () =>
+  console.log("server is running at port " + port)
+);
