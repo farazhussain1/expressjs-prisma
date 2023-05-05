@@ -41,7 +41,8 @@ export class MilkYieldHandler {
       }
       console.log(req.params.id);
       const milkYield = await this.milkYieldService.getById(
-        Number(req.params.id)
+        Number(req.params.id),
+        Number(cattle_id)
       );
       return res.status(200).json(milkYield);
     } catch (error: any) {

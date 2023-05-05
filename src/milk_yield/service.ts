@@ -24,10 +24,11 @@ export class MilkYieldService {
     });
   }
 
-  getById(id: number) {
+  getById(id: number, cattleId:number) {
     return prisma.milkYield.findFirst({
       where: {
         id: id,
+        cattleId: cattleId
       },
     });
   }
