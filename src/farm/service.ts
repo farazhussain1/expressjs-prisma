@@ -1,49 +1,74 @@
 import { PrismaClient, Farm } from "@prisma/client";
-const prisma = new PrismaClient()
+import { milkYieldRouter } from "../milk_yield";
+const prisma = new PrismaClient();
 
 export class FarmService {
-  constructor() { }
+  constructor() {}
 
   get(userId: number) {
     return prisma.farm.findMany({
       where: {
-        userId: userId
+        userId: userId,
       },
-      include: { Cattle: true, _count: true }
-    })
+      include: {
+        Cattle: {
+          include: {
+            MilkYield: {
+              select: {
+                milkInLitres: true,
+                createdAt: true,
+              },
+            },
+            _count: true,
+          },
+        },
+        Ration: true,
+        _count: true,
+      },
+    });
   }
 
   getById(userId: number, farmId: number) {
     return prisma.farm.findFirst({
       where: {
         userId: userId,
-        id: farmId
-      }
-    })
+        id: farmId,
+      },
+      include: {
+        Cattle: {
+          include: {
+            MilkYield: true,
+            _count: true,
+          },
+        },
+        Ration: true,
+        _count: true,
+      },
+    });
   }
 
   create(farm: Farm) {
     return prisma.farm.create({
-      data: farm
-    })
+      data: farm,
+    });
   }
 
   delete(farmId: number, userId: number) {
     return prisma.farm.deleteMany({
       where: {
         id: farmId,
-        userId: userId
-      }
-    })
+        userId: userId,
+      },
+    });
   }
 
   update(farmId: number, userId: number, data: any) {
     return prisma.farm.updateMany({
       where: {
         id: farmId,
-        userId: userId
+        userId: userId,
       },
-      data: data
-    })
+      data: data,
+    });
   }
 }
