@@ -1,7 +1,11 @@
-import JOI from "joi";
+import JOI, { number } from "joi";
 import { Request, Response } from "express";
 import { FarmService } from "./service";
 import { error } from "../helpers/errorHelper";
+
+interface farm {
+  milkInLiters: number;
+}
 
 export class FarmController {
   constructor(private farmService: FarmService = new FarmService()) {}
@@ -11,19 +15,26 @@ export class FarmController {
       const farms = await this.farmService.get(req.userId);
       let sum = 0;
       console.log(farms);
-      
-      // farms.map((farm) => {
-      //   farm.Cattle.map((cattle) => {
-      //     console.log(cattle);
-          
-      //     cattle.MilkYield.map((milkyield) => {
-      //       sum = sum + Number(milkyield.milkInLitres);
-      //     });
-      //   });
-      //   // farm._count["MilkYield"] = sum;
-      //   sum = 0;
-      // });
-      // console.log("sum", sum);
+
+      farms.map((farm) => {
+        farm.Cattle.map((cattle) => {
+          console.log(cattle);
+
+          cattle.MilkYield.map((milkyield) => {
+            sum = sum + Number(milkyield.milkInLitres);
+          });
+        });
+        return {
+          ...farm,
+          _count: {
+            ...farm._count,
+            milkInliters: sum,
+            sum: 0,
+          },
+        };
+        // farm._count.milkInliters = sum;
+      });
+      console.log("sum", sum);
       return res.status(200).json(farms);
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
