@@ -29,20 +29,20 @@ model Farm {
 }
 
 model Cattle {
-  id         Int         @id @default(autoincrement())
-  farmId     Int
-  idNumber   String
-  gender     String
-  breed      String
-  dob        DateTime
-  age        Int
-  status     String
-  vaccinated Boolean
-  image      String?
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  Farm       Farm        @relation(fields: [farmId], references: [id])
-  MilkYield  MilkYield[]
+  id           Int          @id @default(autoincrement())
+  farmId       Int
+  idNumber     String
+  gender       String
+  breed        String
+  dob          DateTime
+  age          Int
+  cattleStatus CattleStatus
+  vaccinated   Boolean
+  image        String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  Farm         Farm         @relation(fields: [farmId], references: [id])
+  MilkYield    MilkYield[]
 
   @@schema("Farm")
 }
@@ -77,6 +77,16 @@ enum RationCategory {
   hay
   cornSillage
   water
+
+  @@schema("Farm")
+}
+
+enum CattleStatus {
+  heifer
+  pregnant
+  dry
+  milking
+  sick
 
   @@schema("Farm")
 }

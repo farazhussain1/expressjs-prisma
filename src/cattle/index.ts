@@ -1,12 +1,11 @@
-import { Router } from 'express';
-import multer from 'multer';
-import storage from '../middleware/multerUpload';
-import { CattleHandler } from './handler';
+import { Router } from "express";
+import { CattleHandler } from "./handler";
 
-export const cattleRouter = Router({ strict: true })
+export const cattleRouter = Router({ strict: true });
 
-const cattle = new CattleHandler()
+const cattle = new CattleHandler();
 
+cattleRouter.get("/status", cattle.getCattleStatus.bind(cattle));
 
 cattleRouter.get("/", cattle.get.bind(cattle));
 

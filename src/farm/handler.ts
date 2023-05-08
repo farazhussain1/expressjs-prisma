@@ -13,28 +13,28 @@ export class FarmController {
   async get(req: Request, res: Response) {
     try {
       const farms = await this.farmService.get(req.userId);
-      let sum = 0;
-      console.log(farms);
+      // let sum = 0;
+      // console.log(farms);
 
-      farms.map((farm) => {
-        farm.Cattle.map((cattle) => {
-          console.log(cattle);
+      // farms.map((farm) => {
+      //   farm.Cattle.map((cattle) => {
+      //     console.log(cattle);
 
-          cattle.MilkYield.map((milkyield) => {
-            sum = sum + Number(milkyield.milkInLitres);
-          });
-        });
-        return {
-          ...farm,
-          _count: {
-            ...farm._count,
-            milkInliters: sum,
-            sum: 0,
-          },
-        };
-        // farm._count.milkInliters = sum;
-      });
-      console.log("sum", sum);
+      //     cattle.MilkYield.map((milkyield) => {
+      //       sum = sum + Number(milkyield.milkInLitres);
+      //     });
+      //   });
+      //   return {
+      //     ...farm,
+      //     _count: {
+      //       ...farm._count,
+      //       milkInliters: sum,
+      //       sum: 0,
+      //     },
+      //   };
+      //   // farm._count.milkInliters = sum;
+      // });
+      // console.log("sum", sum);
       return res.status(200).json(farms);
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
@@ -72,7 +72,6 @@ export class FarmController {
     }
     try {
       req.body.userId = req.userId;
-      console.log("here");
 
       const farm = await this.farmService.create(req.body);
       return res.status(200).json({ message: "New Farm Created!", farm });

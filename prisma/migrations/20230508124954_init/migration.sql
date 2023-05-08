@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Farm"."RationCategory" AS ENUM ('grainMix', 'hay', 'cornSillage', 'water');
 
+-- CreateEnum
+CREATE TYPE "Farm"."CattleStatus" AS ENUM ('heifer', 'pregnant', 'dry', 'milking', 'sick');
+
 -- CreateTable
 CREATE TABLE "Farm"."Farm" (
     "id" SERIAL NOT NULL,
@@ -21,13 +24,13 @@ CREATE TABLE "Farm"."Cattle" (
     "id" SERIAL NOT NULL,
     "farmId" INTEGER NOT NULL,
     "idNumber" TEXT NOT NULL,
-    "image" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "breed" TEXT NOT NULL,
     "dob" TIMESTAMP(3) NOT NULL,
     "age" INTEGER NOT NULL,
-    "status" TEXT NOT NULL,
+    "cattleStatus" "Farm"."CattleStatus" NOT NULL,
     "vaccinated" BOOLEAN NOT NULL,
+    "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -51,7 +54,7 @@ CREATE TABLE "Farm"."Ration" (
     "id" SERIAL NOT NULL,
     "farmId" INTEGER NOT NULL,
     "rationCategory" "Farm"."RationCategory" NOT NULL,
-    "kilograms" INTEGER NOT NULL,
+    "quantity" INTEGER NOT NULL,
     "purchaseDate" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

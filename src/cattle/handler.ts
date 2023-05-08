@@ -10,16 +10,26 @@ import { uploadFile } from "../helpers/formidable";
 const upload = multer({ storage: storage });
 
 export class CattleHandler {
+  constructor(private cattleService: CattleService = new CattleService()) {}
 
-  constructor(private cattleService: CattleService = new CattleService()) { }
+  async getCattleStatus(req: Request, res: Response) {
+    const cattleStatus: any = {
+      heifer: "heifer",
+      pregnant: "pregnant",
+      dry: "dry",
+      milking: "milking",
+      sick: "sick",
+    };
+    return res.status(200).json(cattleStatus);
+  }
 
   async get(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farm_id ?? 0)
+      const farmId = +(req.query.farm_id ?? 0);
 
-      const isFarms = await this.cattleService.isUserFarms(farmId, req.userId)
+      const isFarms = await this.cattleService.isUserFarms(farmId, req.userId);
       if (!isFarms) {
-        return res.status(400).json({ message: "invalid Farm" })
+        return res.status(400).json({ message: "invalid Farm" });
       }
 
       const cattle = await this.cattleService.get(farmId);
@@ -31,8 +41,8 @@ export class CattleHandler {
 
   async getById(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farm_id ?? 0)
-      const cattle = await this.cattleService.getById(+(req.params.id), farmId);
+      const farmId = +(req.query.farm_id ?? 0);
+      const cattle = await this.cattleService.getById(+req.params.id, farmId);
       if (!cattle) {
         return res.status(404).json({ message: "Cattle Not Found" });
       }
@@ -44,37 +54,41 @@ export class CattleHandler {
 
   async create(req: Request, res: Response) {
     try {
-      req.body = await uploadFile(req, "public/cattleImg")
+      req.body = await uploadFile(req, "public/cattleImg");
     } catch (error) {
-      console.log({ error: error })
+      console.log({ error: error });
     }
     console.log(req.body);
 
-    const validation = JOI.object().keys({
-      farmId: JOI.number().required(),
-      idNumber: JOI.number().required(),
-      gender: JOI.string().required(),
-      breed: JOI.string().required(),
-      dob: JOI.date().iso().required(),
-      age: JOI.number(),
-      status: JOI.string().required(),
-      vaccinated: JOI.boolean().required(),
-      image: JOI.optional(),
-    }).validate(req.body, { abortEarly: true })
+    const validation = JOI.object()
+      .keys({
+        farmId: JOI.number().required(),
+        idNumber: JOI.number().required(),
+        gender: JOI.string().required(),
+        breed: JOI.string().required(),
+        dob: JOI.date().iso().required(),
+        age: JOI.number(),
+        cattleStatus: JOI.string().required(),
+        vaccinated: JOI.boolean().required(),
+        image: JOI.optional(),
+      })
+      .validate(req.body, { abortEarly: true });
     if (validation.error) {
-      return error("validationError", validation, res)
+      return error("validationError", validation, res);
     }
 
-
     try {
-      const isFarm = await this.cattleService.isUserFarms(+req.body.farmId, req.userId)
+      const isFarm = await this.cattleService.isUserFarms(
+        +req.body.farmId,
+        req.userId
+      );
       if (!isFarm) {
-        return res.status(400).json({ message: "invalid Farm" })
+        return res.status(400).json({ message: "invalid Farm" });
       }
 
-      req.body.farmId = +req.body.farmId
-      req.body.age = +req.body.age
-      req.body.vaccinated = Boolean(req.body.vaccinated)
+      req.body.farmId = +req.body.farmId;
+      req.body.age = +req.body.age;
+      req.body.vaccinated = Boolean(req.body.vaccinated);
 
       const cattle = await this.cattleService.create(req.body, req.userId);
       return res.status(200).json({ message: "Cattle Added!", cattle });
@@ -85,13 +99,17 @@ export class CattleHandler {
 
   async update(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farm_id ?? 0)
-      const isFarm = await this.cattleService.isUserFarms(farmId, req.userId)
+      const farmId = +(req.query.farm_id ?? 0);
+      const isFarm = await this.cattleService.isUserFarms(farmId, req.userId);
       if (!isFarm) {
-        return res.status(400).json({ message: "invalid Farm" })
+        return res.status(400).json({ message: "invalid Farm" });
       }
 
-      const { count } = await this.cattleService.update(req.body, Number(req.params.id), farmId)
+      const { count } = await this.cattleService.update(
+        req.body,
+        Number(req.params.id),
+        farmId
+      );
       count
         ? res.status(200).json({ message: "Farm Updated!" })
         : res.status(400).json({ message: "Couldn't Update!" });
@@ -103,13 +121,16 @@ export class CattleHandler {
 
   async delete(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farm_id ?? 0)
-      const isFarm = await this.cattleService.isUserFarms(farmId, req.userId)
+      const farmId = +(req.query.farm_id ?? 0);
+      const isFarm = await this.cattleService.isUserFarms(farmId, req.userId);
       if (!isFarm) {
-        return res.status(400).json({ message: "invalid Farm" })
+        return res.status(400).json({ message: "invalid Farm" });
       }
 
-      const { count } = await this.cattleService.delete(Number(req.params.id), farmId)
+      const { count } = await this.cattleService.delete(
+        Number(req.params.id),
+        farmId
+      );
       count
         ? res.status(200).json({ message: "cattle Deleted!" })
         : res.status(400).json({ message: "Couldn't Deleted!" });
@@ -118,6 +139,4 @@ export class CattleHandler {
       return res.status(500).json({ message: error.message });
     }
   }
-
 }
-
