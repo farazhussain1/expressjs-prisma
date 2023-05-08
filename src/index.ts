@@ -30,6 +30,6 @@ app.get("/", (req, res) =>
 app.use(AuthMap);
 app.use("/api/farms", apiRouter);
 
-app.listen(Number(port), () =>
+app.listen(Number(port), '0.0.0.0', () =>
   console.log("server is running at port " + port)
 );
