@@ -34,7 +34,6 @@ export class MilkYieldHandler {
         Number(cattle_id),
         req.userId
       );
-      console.log(farm);
 
       if (!farm) {
         return res.status(400).json({ message: "Cattle not found" });
@@ -66,13 +65,12 @@ export class MilkYieldHandler {
         req.body.cattleId,
         req.userId
       );
-      console.log(farm);
 
       if (!farm) {
         return res.status(400).json({ message: "Cattle not found" });
       }
-      const ration = await this.milkYieldService.create(req.body);
-      return res.status(200).json({ message: "Retained Ration !!", ration });
+      const milkYield = await this.milkYieldService.create(req.body);
+      return res.status(200).json({ message: "Milk yield added !!", milkYield });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
     }

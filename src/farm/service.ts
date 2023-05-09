@@ -39,7 +39,14 @@ export class FarmService {
       include: {
         Cattle: {
           include: {
-            MilkYield: true,
+            MilkYield: {
+              where: {
+                createdAt: {
+                  gte:
+                    new Date().toISOString().split("T")[0] + "T00:00:00.000Z",
+                },
+              },
+            },
             _count: true,
           },
         },
