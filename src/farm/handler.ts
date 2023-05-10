@@ -2,6 +2,7 @@ import JOI, { number } from "joi";
 import { Request, Response } from "express";
 import { FarmService } from "./service";
 import { error } from "../helpers/errorHelper";
+import { RationCategory } from "@prisma/client";
 
 interface farm {
   milkInLiters: number;
@@ -13,28 +14,22 @@ export class FarmController {
   async get(req: Request, res: Response) {
     try {
       const farms = await this.farmService.get(req.userId);
-      // let sum = 0;
-      // console.log(farms);
-
-      // farms.map((farm) => {
-      //   farm.Cattle.map((cattle) => {
-      //     console.log(cattle);
-
-      //     cattle.MilkYield.map((milkyield) => {
-      //       sum = sum + Number(milkyield.milkInLitres);
-      //     });
-      //   });
-      //   return {
-      //     ...farm,
-      //     _count: {
-      //       ...farm._count,
-      //       milkInliters: sum,
-      //       sum: 0,
-      //     },
-      //   };
-      //   // farm._count.milkInliters = sum;
-      // });
-      // console.log("sum", sum);
+      farms.map((farm) => {
+        farm.Cattle.map((cattle) => {
+          let milkTotal = 0;
+          cattle.MilkYield.map((milkyield) => {
+            milkTotal = milkTotal + Number(milkyield.milkInLitres);
+          });
+          cattle._count.MilkYield = milkTotal;
+        });
+        let rationTotal = 0;
+        farm.Ration.map((ration) => {
+          if (ration.rationCategory != "water") {
+            rationTotal = rationTotal + ration.quantity;
+          }
+        });
+        farm._count.Ration = rationTotal;
+      });
       return res.status(200).json(farms);
     } catch (error: any) {
       return res.status(500).json({ message: error.message });

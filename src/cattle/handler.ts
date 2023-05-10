@@ -2,7 +2,6 @@ import JOI from "joi";
 import { Request, Response } from "express";
 import { CattleService } from "./service";
 import { error } from "../helpers/errorHelper";
-import formidable from "formidable";
 import multer from "multer";
 import storage from "../middleware/multerUpload";
 import { uploadFile } from "../helpers/formidable";
@@ -13,14 +12,12 @@ export class CattleHandler {
   constructor(private cattleService: CattleService = new CattleService()) {}
 
   async getCattleStatus(req: Request, res: Response) {
-    const cattleStatus: any = {
-      heifer: "heifer",
-      pregnant: "pregnant",
-      dry: "dry",
-      milking: "milking",
-      sick: "sick",
-    };
-    return res.status(200).json(cattleStatus);
+    return res
+      .status(200)
+      .json({
+        messsage: "Cattle Status",
+        data: ["heifer", "pregnant", "dry", "milking", "sick"],
+      });
   }
 
   async get(req: Request, res: Response) {
@@ -88,7 +85,8 @@ export class CattleHandler {
 
       req.body.farmId = +req.body.farmId;
       req.body.age = +req.body.age;
-      req.body.vaccinated = Boolean(req.body.vaccinated);
+      req.body.vaccinated =
+        req.body.vaccinated === "false" ? false : Boolean(req.body.vaccinated);
 
       const cattle = await this.cattleService.create(req.body, req.userId);
       return res.status(200).json({ message: "Cattle Added!", cattle });

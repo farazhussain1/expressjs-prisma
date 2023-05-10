@@ -1,11 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import { envConfig } from "./config/envConfig";
 import cors from "cors";
-import { farmRouter } from "./farm";
 import { AuthMap } from "./middleware/Auth";
-import { cattleRouter } from "./cattle";
-import { milkYieldRouter } from "./milk_yield";
 import { apiRouter } from "./routes";
 
 const port = process.env.PORT || 4000;
@@ -30,6 +26,6 @@ app.get("/", (req, res) =>
 app.use(AuthMap);
 app.use("/api/farms", apiRouter);
 
-app.listen(Number(port), '0.0.0.0', () =>
+app.listen(Number(port), () =>
   console.log("server is running at port " + port)
 );
