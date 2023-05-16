@@ -7,7 +7,7 @@ import { apiRouter } from "./routes";
 const port = envConfig.PORT;
 
 const app = express();
-export const server = app.listen(Number(port), "0.0.0.0", () =>
+export const server = app.listen(Number(port), () =>
   console.log("server is running at port " + port)
 );
 import "./socketServer";
