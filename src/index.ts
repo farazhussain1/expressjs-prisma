@@ -15,3 +15,10 @@ import "./socketServer";
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 app.use("/api/chats", apiRouter);
+app.get("/",(req:Request,res:Response)=>{
+  return res.json({
+    message:"running"
+  })
+}
+
+)
