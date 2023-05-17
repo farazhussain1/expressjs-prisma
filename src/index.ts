@@ -17,7 +17,7 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.listen(Number(port), "0.0.0.0", () =>
+app.listen(Number(port), () =>
   console.log("server is running at port " + port)
 );
 // import "./socketServer";
