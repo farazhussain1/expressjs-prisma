@@ -41,7 +41,7 @@ model Cattle {
   image        String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  Farm         Farm          @relation(fields: [farmId], references: [id])
+  Farm         Farm          @relation(fields: [farmId], references: [id], onDelete: Cascade)
   MilkYield    MilkYield[]
 
   @@schema("Farm")
@@ -54,7 +54,7 @@ model MilkYield {
   milkYieldDate DateTime
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  Cattle        Cattle   @relation(fields: [cattleId], references: [id])
+  Cattle        Cattle   @relation(fields: [cattleId], references: [id], onDelete: Cascade)
 
   @@schema("Farm")
 }
@@ -67,7 +67,7 @@ model Ration {
   purchaseDate   DateTime
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
-  Farm           Farm           @relation(fields: [farmId], references: [id])
+  Farm           Farm           @relation(fields: [farmId], references: [id], onDelete: Cascade)
 
   @@schema("Farm")
 }

@@ -9,7 +9,9 @@ export class RationHandler {
 
   async get(req: Request, res: Response) {
     try {
-      const farmId = +(req.query.farm_id ?? 0)
+      console.log(req.query);
+
+      const farmId = +(req.query.farmId ?? 0)
       const isFarms = await this.rationService.isUserFarms(farmId, req.userId)
       if (!isFarms) {
         return res.status(400).json({ message: "invalid Farm" })
@@ -22,8 +24,8 @@ export class RationHandler {
   }
 
   async getById(req: Request, res: Response) {
-    try {
-      const farmId = +(req.query.farm_id ?? 0)
+    try {      
+      const farmId = +(req.query.farmId ?? 0)
       const ration = await this.rationService.getById(+(req.params.id), farmId);
       if (!ration) {
         return res.status(404).json({ message: "Ration Not Found" });
@@ -46,13 +48,10 @@ export class RationHandler {
     }
 
     try {
-      const isFarm = await this.rationService.isUserFarms(req.body.farm_id, req.userId)
-      console.log(isFarm);
-      
+      const isFarm = await this.rationService.isUserFarms(req.body.farmId, req.userId)      
       if (!isFarm) {
-        return res.status(400).json({ message: "invalid Farm" })
+        return res.status(400).json({ message: "Invalid Farm" })
       }
-
       const ration = await this.rationService.create(req.body);
       return res.status(200).json({ message: "Retained Ration !!", ration });
     } catch (error: any) {
@@ -62,7 +61,7 @@ export class RationHandler {
 
   // async update(req: Request, res: Response) {
   //   try {
-  //     const farmId = +(req.query.farm_id ?? 0)
+  //     const farmId = +(req.query.farmId ?? 0)
   //     const isFarm = await this.rationService.isUserFarms(farmId, req.userId)
   //     if (!isFarm) {
   //       return res.status(400).json({ message: "invalid Farm" })
@@ -80,7 +79,7 @@ export class RationHandler {
 
   // async delete(req: Request, res: Response) {
   //   try {
-  //     const farmId = +(req.query.farm_id ?? 0)
+  //     const farmId = +(req.query.farmId ?? 0)
   //     const isFarm = await this.rationService.isUserFarms(farmId, req.userId)
   //     if (!isFarm) {
   //       return res.status(400).json({ message: "invalid Farm" })

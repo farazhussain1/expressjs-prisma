@@ -10,7 +10,7 @@ CREATE TABLE "Farm"."Farm" (
     "userId" INTEGER NOT NULL,
     "farmName" TEXT NOT NULL,
     "country" TEXT NOT NULL,
-    "province" TEXT NOT NULL,
+    "province" TEXT,
     "area" TEXT NOT NULL,
     "location" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -28,7 +28,7 @@ CREATE TABLE "Farm"."Cattle" (
     "breed" TEXT NOT NULL,
     "dob" TIMESTAMP(3) NOT NULL,
     "age" INTEGER NOT NULL,
-    "cattleStatus" "Farm"."CattleStatus" NOT NULL,
+    "cattleStatus" "Farm"."CattleStatus",
     "vaccinated" BOOLEAN NOT NULL,
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -63,10 +63,10 @@ CREATE TABLE "Farm"."Ration" (
 );
 
 -- AddForeignKey
-ALTER TABLE "Farm"."Cattle" ADD CONSTRAINT "Cattle_farmId_fkey" FOREIGN KEY ("farmId") REFERENCES "Farm"."Farm"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Farm"."Cattle" ADD CONSTRAINT "Cattle_farmId_fkey" FOREIGN KEY ("farmId") REFERENCES "Farm"."Farm"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Farm"."MilkYield" ADD CONSTRAINT "MilkYield_cattleId_fkey" FOREIGN KEY ("cattleId") REFERENCES "Farm"."Cattle"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Farm"."MilkYield" ADD CONSTRAINT "MilkYield_cattleId_fkey" FOREIGN KEY ("cattleId") REFERENCES "Farm"."Cattle"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Farm"."Ration" ADD CONSTRAINT "Ration_farmId_fkey" FOREIGN KEY ("farmId") REFERENCES "Farm"."Farm"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Farm"."Ration" ADD CONSTRAINT "Ration_farmId_fkey" FOREIGN KEY ("farmId") REFERENCES "Farm"."Farm"("id") ON DELETE CASCADE ON UPDATE CASCADE;

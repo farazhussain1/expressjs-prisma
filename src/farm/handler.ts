@@ -61,7 +61,6 @@ export class FarmController {
       const farm = await this.farmService.create(req.body);
       return res.status(200).json({ message: "New Farm Created!", farm });
     } catch (error: any) {
-      console.log(error);
       return res.status(500).json({ message: error.message });
     }
   }
@@ -88,7 +87,6 @@ export class FarmController {
         Number(req.params.farmId),
         req.userId
       );
-      console.log(farm);
 
       farm.count
         ? res.status(200).json({ message: "Farm Deleted!" })
