@@ -23,7 +23,7 @@ CREATE TABLE "Farm"."Farm" (
 CREATE TABLE "Farm"."Cattle" (
     "id" SERIAL NOT NULL,
     "farmId" INTEGER NOT NULL,
-    "idNumber" TEXT NOT NULL,
+    "cattleName" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "breed" TEXT NOT NULL,
     "dob" TIMESTAMP(3) NOT NULL,

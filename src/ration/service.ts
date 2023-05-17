@@ -1,39 +1,45 @@
 import { PrismaClient, Ration } from "@prisma/client";
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export class RationService {
-  constructor() { }
+  constructor() {}
 
   isUserFarms(farmId: number, userId: number) {
     return prisma.farm.findFirst({
       where: {
         id: farmId,
-        userId: userId
-      }
-    })
+        userId: userId,
+      },
+    });
   }
 
   get(farmId: number) {
+    // const sum = prisma.ration.groupBy({
+    //   by: ["rationCategory", "farmId"],
+    //   where: { farmId },
+    //   _sum: {
+    //     quantity: true,
+    //   },
+    // });
     return prisma.ration.findMany({
       where: {
-        farmId: farmId
-      }
-    })
+        farmId: farmId,
+      },
+    });
   }
 
   getById(id: number, farmId: number) {
     return prisma.ration.findFirst({
       where: {
         id,
-        farmId: farmId
-      }
-    })
+        farmId: farmId,
+      },
+    });
   }
 
   create(ration: Ration) {
     return prisma.ration.create({
-      data: ration
-    })
+      data: ration,
+    });
   }
-  
 }

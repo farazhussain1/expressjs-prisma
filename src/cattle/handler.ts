@@ -1,4 +1,4 @@
-import JOI from "joi";
+import JOI, { date } from "joi";
 import { Request, Response } from "express";
 import { CattleService } from "./service";
 import { error } from "../helpers/errorHelper";
@@ -12,12 +12,10 @@ export class CattleHandler {
   constructor(private cattleService: CattleService = new CattleService()) {}
 
   async getCattleStatus(req: Request, res: Response) {
-    return res
-      .status(200)
-      .json({
-        messsage: "Cattle Status",
-        data: ["heifer", "pregnant", "dry", "milking", "sick"],
-      });
+    return res.status(200).json({
+      messsage: "Cattle Status",
+      data: ["heifer", "pregnant", "dry", "milking", "sick"],
+    });
   }
 
   async get(req: Request, res: Response) {
@@ -60,12 +58,11 @@ export class CattleHandler {
     const validation = JOI.object()
       .keys({
         farmId: JOI.number().required(),
-        idNumber: JOI.number().required(),
+        cattleName: JOI.string().required(),
         gender: JOI.string().required(),
         breed: JOI.string().required(),
         dob: JOI.date().iso().required(),
-        age: JOI.number(),
-        cattleStatus: JOI.string().required(),
+        cattleStatus: JOI.string().optional(),
         vaccinated: JOI.boolean().required(),
         image: JOI.optional(),
       })
@@ -84,7 +81,14 @@ export class CattleHandler {
       }
 
       req.body.farmId = +req.body.farmId;
-      req.body.age = +req.body.age;
+      const dob = new Date(req.body.dob);
+      const currentDate = new Date();
+      const year = currentDate.getFullYear() - dob.getFullYear();
+      const month = currentDate.getMonth() - dob.getMonth();
+      req.body.age = year;
+
+      // const age = Date.now() - Number(req.body.dob);
+      console.log("age", req.body.age, month);
       req.body.vaccinated =
         req.body.vaccinated === "false" ? false : Boolean(req.body.vaccinated);
 

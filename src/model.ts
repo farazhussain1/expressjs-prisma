@@ -8,17 +8,4 @@ export interface Config {
   EMAIL_PASS: string;
   DATABASE_URL: string;
 }
-export interface ForgetPassword {
-  [key: string]: {
-    email: string,
-    timestamp: number,
-  };
-}
-
-
-declare module "express-serve-static-core" {
-  interface Request {
-    userId: number;
-  }
-}
 

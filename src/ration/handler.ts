@@ -10,12 +10,10 @@ export class RationHandler {
   async get(req: Request, res: Response) {
     try {
       const farmId = +(req.query.farm_id ?? 0)
-
       const isFarms = await this.rationService.isUserFarms(farmId, req.userId)
       if (!isFarms) {
         return res.status(400).json({ message: "invalid Farm" })
       }
-
       const ration = await this.rationService.get(farmId);
       return res.status(200).json(ration);
     } catch (error: any) {

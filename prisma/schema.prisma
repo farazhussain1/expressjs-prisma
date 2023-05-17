@@ -17,7 +17,7 @@ model Farm {
   userId    Int
   farmName  String
   country   String
-  province  String
+  province  String?
   area      String
   location  String
   createdAt DateTime @default(now())
@@ -29,19 +29,19 @@ model Farm {
 }
 
 model Cattle {
-  id           Int          @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   farmId       Int
-  idNumber     String
+  cattleName   String
   gender       String
   breed        String
   dob          DateTime
   age          Int
-  cattleStatus CattleStatus
+  cattleStatus CattleStatus?
   vaccinated   Boolean
   image        String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  Farm         Farm         @relation(fields: [farmId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  Farm         Farm          @relation(fields: [farmId], references: [id])
   MilkYield    MilkYield[]
 
   @@schema("Farm")

@@ -5,6 +5,14 @@ const prisma = new PrismaClient();
 export class FarmService {
   constructor() {}
 
+  isExist(farmName: string) {
+    return prisma.farm.findFirst({
+      where: {
+        farmName: farmName,
+      },
+    });
+  }
+
   get(userId: number) {
     return prisma.farm.findMany({
       where: {

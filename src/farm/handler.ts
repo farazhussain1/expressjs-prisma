@@ -2,11 +2,7 @@ import JOI, { number } from "joi";
 import { Request, Response } from "express";
 import { FarmService } from "./service";
 import { error } from "../helpers/errorHelper";
-import { RationCategory } from "@prisma/client";
-
-interface farm {
-  milkInLiters: number;
-}
+import { Farm, RationCategory } from "@prisma/client";
 
 export class FarmController {
   constructor(private farmService: FarmService = new FarmService()) {}
@@ -14,21 +10,13 @@ export class FarmController {
   async get(req: Request, res: Response) {
     try {
       const farms = await this.farmService.get(req.userId);
-      farms.map((farm) => {
-        farm.Cattle.map((cattle) => {
-          let milkTotal = 0;
-          cattle.MilkYield.map((milkyield) => {
-            milkTotal = milkTotal + Number(milkyield.milkInLitres);
-          });
-          cattle._count.MilkYield = milkTotal;
+      farms.map((farm: any) => {
+        farm.totalMilkYield = 0;
+        farm.Cattle.map((cattle: any) => {
+          cattle.totalMilkYield = 0;
+          cattle.MilkYield.map((milkYield: any) => cattle.totalMilkYield += Number(milkYield.milkInLitres));
+          farm.totalMilkYield += cattle.totalMilkYield;
         });
-        let rationTotal = 0;
-        farm.Ration.map((ration) => {
-          if (ration.rationCategory != "water") {
-            rationTotal = rationTotal + ration.quantity;
-          }
-        });
-        farm._count.Ration = rationTotal;
       });
       return res.status(200).json(farms);
     } catch (error: any) {
@@ -56,18 +44,20 @@ export class FarmController {
       .keys({
         farmName: JOI.string().required(),
         country: JOI.string().required(),
-        province: JOI.string().required(),
+        province: JOI.string().optional(),
         area: JOI.string().required(),
         location: JOI.string().required(),
       })
       .validate(req.body, { abortEarly: false });
     if (validation.error) {
       return error("validationError", validation, res);
-      // return res.status(400).json({ error: validator.error.details })
     }
     try {
+      const isExist = await this.farmService.isExist(req.body.farmName);
+      if (isExist) {
+        return res.status(403).json({ message: "Farm Name Already Exist" });
+      }
       req.body.userId = req.userId;
-
       const farm = await this.farmService.create(req.body);
       return res.status(200).json({ message: "New Farm Created!", farm });
     } catch (error: any) {
