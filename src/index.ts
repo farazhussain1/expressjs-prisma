@@ -10,7 +10,7 @@ const app = express();
 export const server = app.listen(Number(port), '0.0.0.0', () =>
   console.log("server is running at port " + port)
 );
-import "./socketServer";
+// import "./socketServer";
 
 app.use(express.json());
 app.use(cors({ origin: "*" }));
