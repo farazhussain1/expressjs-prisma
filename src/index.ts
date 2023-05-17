@@ -17,7 +17,9 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.listen(Number(port), () =>
-  console.log("server is running at port " + port)
+app.listen(
+  Number(port),
+  envConfig.NODE_ENV == "development" ? "" : "0.0.0.0",
+  () => console.log("server is running at port " + port)
 );
 // import "./socketServer";
