@@ -1,3 +1,5 @@
+import { Socket } from "socket.io";
+
 export interface Config {
   NODE_ENV: string;
   SECRET_KEY: string;
@@ -9,11 +11,13 @@ export interface OnlineUsers {
   [userId: number]: {
     authenticated: boolean;
     socketId: string;
+    socket?: Socket;
   };
 }
 
-declare module "express-serve-static-core" {
-  interface Request {
-    userId: number;
-  }
+export interface CattleAlert {
+  userId: number;
+  message: string;
+  cattleId: number;
+  dateTime: Date;
 }

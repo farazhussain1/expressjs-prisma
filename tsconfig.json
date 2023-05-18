@@ -9,7 +9,8 @@
     "outDir": "./dist",
     "moduleResolution": "node",
     "typeRoots": ["src/config/global.d.ts", "./node_modules/@types"],
-    "plugins": [{ "transform": "ts-transformer-keys/transformer" }]
+    "plugins": [{ "transform": "ts-transformer-keys/transformer" }],
+    "resolveJsonModule": true
   },
   "include": ["src/**/*", "../client/client.js"],
   "exclude": ["./node_modules"],

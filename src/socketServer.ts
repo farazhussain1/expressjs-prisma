@@ -1,11 +1,11 @@
 import { Server } from "socket.io";
-
 import { OnlineUsers } from "./model";
 import { verifyToken } from "./middleware/Auth";
 import { ChatService } from "./service";
 import { httpServer } from ".";
 
-const onlineUsers: OnlineUsers = {};
+
+export const onlineUsers: OnlineUsers = {};
 const socketServer = new Server(httpServer, { cors: { origin: "*" } });
 const { saveMessage } = new ChatService();
 
@@ -29,8 +29,9 @@ socketServer.on("connection", async (socket) => {
   onlineUsers[user.id] = {
     authenticated: true,
     socketId: socket.id,
+    socket
   };
-  console.log(onlineUsers);
+  console.table(onlineUsers);
 
   socket.on("message", (payload) => {
     payload.from = user.id;
@@ -44,6 +45,6 @@ socketServer.on("connection", async (socket) => {
   socket.on("disconnect", (payload) => {
     console.log(`Socket : ${socket.id} disconnected.`);
     delete onlineUsers[user.id];
-    console.log(onlineUsers);
+    console.table(onlineUsers);
   });
 });
