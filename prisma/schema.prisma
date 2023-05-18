@@ -46,7 +46,7 @@ model Cattle {
   breed        String
   dob          DateTime
   age          Int
-  cattleStatus CattleStatus?
+  cattleStatus CattleStatus[]
   vaccinated   Boolean
   image        String?
   createdAt    DateTime      @default(now())

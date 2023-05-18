@@ -37,7 +37,7 @@ CREATE TABLE "Farm"."Cattle" (
     "breed" TEXT NOT NULL,
     "dob" TIMESTAMP(3) NOT NULL,
     "age" INTEGER NOT NULL,
-    "cattleStatus" "Farm"."CattleStatus",
+    "cattleStatus" "Farm"."CattleStatus"[],
     "vaccinated" BOOLEAN NOT NULL,
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

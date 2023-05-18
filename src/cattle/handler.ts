@@ -62,7 +62,7 @@ export class CattleHandler {
         gender: JOI.string().required(),
         breed: JOI.string().required(),
         dob: JOI.date().iso().required(),
-        cattleStatus: JOI.string().optional(),
+        cattleStatus: JOI.optional(),
         vaccinated: JOI.boolean().required(),
         image: JOI.optional(),
       })
