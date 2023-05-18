@@ -12,11 +12,20 @@ CREATE TABLE "Farm"."Farm" (
     "country" TEXT NOT NULL,
     "province" TEXT,
     "area" TEXT NOT NULL,
-    "location" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Farm_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Farm"."Coordinates" (
+    "id" SERIAL NOT NULL,
+    "farmId" INTEGER NOT NULL,
+    "longitude" TEXT NOT NULL,
+    "latitude" TEXT NOT NULL,
+
+    CONSTRAINT "Coordinates_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -61,6 +70,9 @@ CREATE TABLE "Farm"."Ration" (
 
     CONSTRAINT "Ration_pkey" PRIMARY KEY ("id")
 );
+
+-- AddForeignKey
+ALTER TABLE "Farm"."Coordinates" ADD CONSTRAINT "Coordinates_farmId_fkey" FOREIGN KEY ("farmId") REFERENCES "Farm"."Farm"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Farm"."Cattle" ADD CONSTRAINT "Cattle_farmId_fkey" FOREIGN KEY ("farmId") REFERENCES "Farm"."Farm"("id") ON DELETE CASCADE ON UPDATE CASCADE;

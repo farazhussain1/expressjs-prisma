@@ -1,4 +1,4 @@
-import { PrismaClient, Farm } from "@prisma/client";
+import { Farm, PrismaClient } from "@prisma/client";
 import { milkYieldRouter } from "../milk_yield";
 const prisma = new PrismaClient();
 
@@ -19,6 +19,7 @@ export class FarmService {
         userId: userId,
       },
       include: {
+        Coordinates: { select: { longitude: true, latitude: true } },
         Cattle: {
           include: {
             MilkYield: {
@@ -45,6 +46,7 @@ export class FarmService {
         id: farmId,
       },
       include: {
+        Coordinates: { select: { longitude: true, latitude: true } },
         Cattle: {
           include: {
             MilkYield: {
@@ -64,9 +66,30 @@ export class FarmService {
     });
   }
 
-  create(farm: Farm) {
+  create(farm: any) {
+    const coordinates = farm.coordinates;
+    delete farm.coordinates;
+    console.log(farm);
+
     return prisma.farm.create({
-      data: farm,
+      data: {
+        Coordinates: { createMany: { data: coordinates } },
+        area: farm.area,
+        country: farm.country,
+        farmName: farm.farmName,
+        userId: farm.userId,
+        province: farm.province,
+      },
+      select: {
+        id: true,
+        userId: true,
+        farmName: true,
+        area: true,
+        province: true,
+        Coordinates: { select: { longitude: true, latitude: true } },
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 

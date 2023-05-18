@@ -46,7 +46,7 @@ export class FarmController {
         country: JOI.string().required(),
         province: JOI.string().optional(),
         area: JOI.string().required(),
-        location: JOI.string().required(),
+        coordinates: JOI.array().required(),
       })
       .validate(req.body, { abortEarly: false });
     if (validation.error) {
@@ -57,7 +57,7 @@ export class FarmController {
       if (isExist) {
         return res.status(403).json({ message: "Farm Name Already Exist" });
       }
-      req.body.userId = req.userId;
+      req.body.userId = req.userId; 
       const farm = await this.farmService.create(req.body);
       return res.status(200).json({ message: "New Farm Created!", farm });
     } catch (error: any) {

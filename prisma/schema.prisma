@@ -13,17 +13,27 @@ datasource db {
 }
 
 model Farm {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  farmName  String
-  country   String
-  province  String?
-  area      String
-  location  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Cattle    Cattle[]
-  Ration    Ration[]
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  farmName    String
+  country     String
+  province    String?
+  area        String
+  Coordinates Coordinates[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Cattle      Cattle[]
+  Ration      Ration[]
+
+  @@schema("Farm")
+}
+
+model Coordinates {
+  id        Int    @id @default(autoincrement())
+  farmId    Int
+  longitude String
+  latitude  String
+  Farm      Farm   @relation(fields: [farmId], references: [id], onDelete: Cascade)
 
   @@schema("Farm")
 }
