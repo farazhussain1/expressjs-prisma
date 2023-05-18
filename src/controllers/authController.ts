@@ -15,8 +15,6 @@ export class AuthController {
     req: Request,
     res: Response
   ): Promise<Response<any, Record<string, any>>> {
-    console.log("router", req.body);
-
     const validation = JOI.object()
       .keys({
         username: JOI.string().required().min(3),
@@ -27,9 +25,9 @@ export class AuthController {
       })
       .validate(req.body, { abortEarly: false });
 
-    validation.error?.details.forEach((element) => {
-      console.log(element.message);
-    });
+    // validation.error?.details.forEach((element) => {
+    //   console.log(element.message);
+    // });
 
     if (validation.error) {
       return error("validationError", validation, res);
@@ -50,7 +48,7 @@ export class AuthController {
 
       const hashPassword = bcrypt.hashSync(password, 10);
       req.body.password = hashPassword;
-      const user = await userService.create(req.body);
+      const user: any = await userService.create(req.body);
 
       const token = sign({ email: user.email }, envConfig.SECRET_KEY, {
         expiresIn: "24h",
@@ -70,6 +68,8 @@ export class AuthController {
           .json({ message: "kindly check you provided valid email or not" });
       }
 
+      user["country"] = country;
+
       return res.status(200).json({
         message: `Your account has been created successfully! \n Verification email sent to <b> ${user.email} </b>`,
         user,
@@ -80,7 +80,6 @@ export class AuthController {
   }
 
   async signIn(req: Request, res: Response) {
-    console.log(req.body);
     const validation = JOI.object()
       .keys({
         email: JOI.string().required().email(),
@@ -131,6 +130,7 @@ export class AuthController {
       return res.status(200).json({
         message: "Successfuly Login ",
         user,
+        token,
       });
     } catch (error: any) {
       res.status(500).json({ message: error.message });

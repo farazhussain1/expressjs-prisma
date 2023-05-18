@@ -13,6 +13,7 @@ export class UserService {
         id: true,
         username: true,
         email: true,
+        number: true,
         password: true,
         isVerified: true,
         createdAt: true,
