@@ -5,7 +5,7 @@ export class ChatController {
   constructor(private chatService: ChatService) {}
 
   async get(req: Request, res: Response) {
-    req.userId = 1;
+    console.log(req.userId);
     const chats = await this.chatService.get(req.userId);
     chats.map((chat: any) => {
       if (chat.recipient.id == req.userId) {

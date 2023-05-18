@@ -1,10 +1,9 @@
 import { Server } from "socket.io";
+
 import { OnlineUsers } from "./model";
 import { verifyToken } from "./middleware/Auth";
 import { ChatService } from "./service";
-import { Application } from "express";
 import { httpServer } from ".";
-
 
 const onlineUsers: OnlineUsers = {};
 const socketServer = new Server(httpServer, { cors: { origin: "*" } });
