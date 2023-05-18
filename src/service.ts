@@ -1,20 +1,31 @@
 import { PrismaClient, User } from "@prisma/client";
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export class UserService {
-  constructor() { }
+  constructor() {}
 
   get(data: User) {
     return prisma.user.findFirst({
       where: {
-        OR: [{ email: data.email }, { id: data.id }]
+        OR: [{ email: data.email }, { id: data.id }],
       },
-      select: { id: true, username: true, email: true, password: true, isVerified: true, createdAt: true, updatedAt: true, Profile: { select: { country: true } } }
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        password: true,
+        isVerified: true,
+        createdAt: true,
+        updatedAt: true,
+        Profile: { select: { country: true } },
+      },
     });
   }
 
-  isExists(email: string) {
-    return prisma.user.findFirst({ where: { email: email } });
+  isExists(data: string) {
+    return prisma.user.findFirst({
+      where: { OR: [{ email: data }, { number: data }] },
+    });
   }
 
   create(user: any) {
@@ -23,24 +34,24 @@ export class UserService {
         username: user.username,
         email: user.email,
         password: user.password,
+        number: user.number,
         Profile: {
           create: {
             country: user.country,
-          }
-        }
-      }
-    }
-    )
+          },
+        },
+      },
+    });
   }
 
   delete(email: string) {
-    return prisma.user.delete({ where: { email: email } })
+    return prisma.user.delete({ where: { email: email } });
   }
 
   update(email: string, data: any) {
     return prisma.user.update({
       where: { email: email },
-      data: data
-    })
+      data: data,
+    });
   }
 }
