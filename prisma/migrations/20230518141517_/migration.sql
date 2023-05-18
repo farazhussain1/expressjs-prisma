@@ -22,8 +22,8 @@ CREATE TABLE "Farm"."Farm" (
 CREATE TABLE "Farm"."Coordinates" (
     "id" SERIAL NOT NULL,
     "farmId" INTEGER NOT NULL,
-    "longitude" TEXT NOT NULL,
-    "latitude" TEXT NOT NULL,
+    "longitude" DECIMAL(65,30) NOT NULL,
+    "latitude" DECIMAL(65,30) NOT NULL,
 
     CONSTRAINT "Coordinates_pkey" PRIMARY KEY ("id")
 );

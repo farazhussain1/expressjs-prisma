@@ -29,11 +29,11 @@ model Farm {
 }
 
 model Coordinates {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   farmId    Int
-  longitude String
-  latitude  String
-  Farm      Farm   @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  longitude Decimal
+  latitude  Decimal
+  Farm      Farm    @relation(fields: [farmId], references: [id], onDelete: Cascade)
 
   @@schema("Farm")
 }
