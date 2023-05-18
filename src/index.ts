@@ -5,26 +5,21 @@ import { envConfig } from "./config/envConfig";
 import { apiRouter } from "./routes";
 import cookieParser from "cookie-parser";
 
-const port = envConfig.PORT || 5000;
-
 const app = express();
+const port = envConfig.PORT;
 
 app.use(express.static("public"));
 app.use(cors({ origin: "*" }));
-
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req: Request, res: Response) => {
-  return res.json({
-    message: "running",
-  });
-});
-
+app.get("/", (req: Request, res: Response) =>
+  res.json("Chat service is running & up!")
+);
 app.use("/api/chats", apiRouter);
 
-app.listen(Number(port), "0.0.0.0", () =>
+export const httpServer = app.listen(Number(port), "0.0.0.0", () =>
   console.log("server is running at port " + port)
 );
-// import "./socketServer";
+import "./socketServer";

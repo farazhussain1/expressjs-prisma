@@ -5,4 +5,4 @@ import { ChatService } from "./service";
 export const apiRouter = Router();
 const chatController = new ChatController(new ChatService());
 
-apiRouter.get("/n", chatController.get.bind(chatController));
+apiRouter.get("/", chatController.get.bind(chatController));
