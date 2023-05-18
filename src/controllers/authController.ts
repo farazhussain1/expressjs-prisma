@@ -125,12 +125,12 @@ export class AuthController {
       });
 
       user["country"] = user.Profile?.country;
+      user["token"] = token;
       delete user.Profile;
       delete user.password;
       return res.status(200).json({
         message: "Successfuly Login ",
         user,
-        token,
       });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
