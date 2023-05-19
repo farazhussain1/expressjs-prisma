@@ -18,8 +18,8 @@ userRouter.get("/verify/:token", user.verifyEmail.bind(user));
 
 userRouter.post("/forgotPassword", user.forgotPassword.bind(user));
 
-userRouter.post("/changePassword/:token", user.changePassword.bind(user));
+userRouter.post("/changePassword", user.changePassword.bind(user));
 
 userRouter.get("/users", user.getAll.bind(user));
 
-// userRouter.get("/changePassword",)
+userRouter.get("/changePassword",user.resetPassword.bind(user))
