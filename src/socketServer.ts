@@ -37,7 +37,6 @@ socketServer.on("connection", async (socket) => {
     payload.from = user.id;
     const data = saveMessage(payload);
     console.log(data);
-
     const toSocket = onlineUsers[payload.to]?.socketId;
     socket.to(toSocket).emit("message", payload);
   });

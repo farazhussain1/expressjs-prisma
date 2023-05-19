@@ -19,5 +19,12 @@ export interface CattleAlert {
   userId: number;
   message: string;
   cattleId: number;
-  dateTime: Date;
+  cattleName: string;
+  dateTime: string;
+}
+
+declare module "express-serve-static-core" {
+  interface Request {
+    userId: number;
+  }
 }

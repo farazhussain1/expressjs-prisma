@@ -6,5 +6,4 @@ export const apiRouter = Router();
 const chatController = new ChatController(new ChatService());
 
 apiRouter.get("/", chatController.get.bind(chatController));
-
-// apiRouter.post("/register", chatController.post.bind(chatController))
+// apiRouter.post('/register',)
