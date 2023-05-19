@@ -1,1 +1,16 @@
-[{"userId":5,"message":"Test Alert","cattleId":2,"cattleName":"cow","dateTime":"2023-05-18T02:22:05Z"},{"userId":13,"message":"Test Alert 2","cattleId":2,"cattleName":"cow","dateTime":"2023-05-18T02:22:05Z"},{"cattleId":1,"cattleName":"cattle name","dateTime":"10-5-2023T00:00:00.0Z","message":"Test Alert","userId":5}]
+[
+    {
+        "userId": 5,
+        "message": "Test Alert",
+        "cattleId": 2,
+        "cattleName": "cow",
+        "dateTime": "2023-05-18T02:22:05Z"
+    },
+    {
+        "userId": 13,
+        "message": "Test Alert 2",
+        "cattleId": 2,
+        "cattleName": "cow",
+        "dateTime": "2023-05-18T02:22:05Z"
+    }
+]
