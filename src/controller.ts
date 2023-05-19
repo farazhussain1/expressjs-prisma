@@ -20,6 +20,8 @@ export class ChatController {
         delete chat.recipient;
         delete chat.sender;
       }
+      chat.user.lastMessage = chat.Message[chat.Message.length - 1].createdAt
+      console.log(chat.user.id, chat.Message.length - 1, chat.Message[chat.Message.length - 1].createdAt)
       chat.messages = chat.Message;
       delete chat.Message;
     });
@@ -34,7 +36,7 @@ export class ChatController {
       message: req.body.message,
       userId: req.userId,
     });
-    const filePath = join( __dirname,'/jobs/alerts.json')
+    const filePath = join(__dirname, '/jobs/alerts.json')
     console.log(filePath);
 
     writeFileSync(filePath, JSON.stringify(alerts));
