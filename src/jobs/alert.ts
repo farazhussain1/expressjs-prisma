@@ -7,7 +7,7 @@ const alerts: CattleAlert[] = allAlerts;
 
 const job = schedule(
   "* * * * * *",
-  (data) => {
+  (data:any) => {
     const todayAlerts = alerts.filter((alert) => isToday(alert.dateTime));
     todayAlerts.forEach((alert) => {
       onlineUsers[alert.userId].socket?.emit("alert", {

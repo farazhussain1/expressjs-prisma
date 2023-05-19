@@ -2,11 +2,6 @@
     {
         "userId": 5,
         "message": "Test Alert",
-<<<<<<< HEAD
-        "cattleId": " cow id 123",
-        "cattleName":"cattle name",
-        "dateTime": "10-5-2023T00:00:00.0Z"
-=======
         "cattleId": 2,
         "cattleName": "cow",
         "dateTime": "2023-05-18T02:22:05Z"
@@ -17,6 +12,5 @@
         "cattleId": 2,
         "cattleName": "cow",
         "dateTime": "2023-05-18T02:22:05Z"
->>>>>>> c834d6a2d51bf74b20155fd9ffd3c953b59e7567
     }
 ]
