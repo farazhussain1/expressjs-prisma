@@ -3,8 +3,9 @@ import { ChatService } from "./service";
 import { request } from "http";
 import alerts from "./jobs/alerts.json";
 import { writeFileSync } from "fs";
+import { join } from "path";
 export class ChatController {
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService) { }
 
   async get(req: Request, res: Response) {
     console.log(req.userId);
@@ -31,11 +32,14 @@ export class ChatController {
       cattleName: req.body.cattleName,
       dateTime: req.body.dateTime,
       message: req.body.message,
-      userId: req.body.userId,
+      userId: req.userId,
     });
-    writeFileSync('D:\metis\project\agView\ChatService\src\jobs\alerts.json',alerts.toString());
+    const filePath = join( __dirname,'/jobs/alerts.json')
+    console.log(filePath);
+
+    writeFileSync(filePath, JSON.stringify(alerts));
     console.log(alerts);
-    
+
     return res.status(200).json({ message: "done" });
   }
 }

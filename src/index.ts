@@ -17,13 +17,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) =>
   res.json("Chat service is running & up!")
-  );
-  app.use(AuthMap)
+);
+app.use(AuthMap)
 app.use("/api/chats", apiRouter);
 app.use("/api/alert", apiRouter);
 
 export const httpServer = app.listen(Number(port), '0.0.0.0', () =>
-console.log("server is running at port " + port)
+  console.log("server is running at port " + port)
 );
 import "./socketServer";
 import "./jobs/alert"
