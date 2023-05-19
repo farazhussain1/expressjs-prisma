@@ -5,16 +5,18 @@ import { error } from "../helpers/errorHelper";
 import { Farm, RationCategory } from "@prisma/client";
 
 export class FarmController {
-  constructor(private farmService: FarmService = new FarmService()) {}
+  constructor(private farmService: FarmService = new FarmService()) { }
 
   async get(req: Request, res: Response) {
     try {
       const farms = await this.farmService.get(req.userId);
       farms.map((farm: any) => {
         farm.totalMilkYield = 0;
+        farm.bestPerformer = 0
         farm.Cattle.map((cattle: any) => {
           cattle.totalMilkYield = 0;
           cattle.MilkYield.map((milkYield: any) => cattle.totalMilkYield += Number(milkYield.milkInLitres));
+          farm.bestPerformer = cattle.totalMilkYield > farm.bestPerformer ? cattle.totalMilkYield : farm.bestPerformer
           farm.totalMilkYield += cattle.totalMilkYield;
         });
       });
@@ -26,10 +28,20 @@ export class FarmController {
 
   async getById(req: Request, res: Response) {
     try {
-      const farm = await this.farmService.getById(
+      const farm: any = await this.farmService.getById(
         req.userId,
         Number(req.params.farmId)
       );
+
+      farm.totalMilkYield = 0
+      farm.bestPerformer = 0
+      farm?.Cattle.map((cattle: any) => {
+        cattle.totalMilkYield = 0;
+        cattle.MilkYield.map((milkYield: any) => cattle.totalMilkYield += Number(milkYield.milkInLitres));
+        farm.bestPerformer = cattle.totalMilkYield > farm.bestPerformer ? cattle.totalMilkYield : farm.bestPerformer
+        farm.totalMilkYield = farm.totalMilkYield + cattle.totalMilkYield
+      });
+
       if (!farm) {
         return res.status(404).json({ message: "Farm Not Found" });
       }
@@ -57,7 +69,7 @@ export class FarmController {
       if (isExist) {
         return res.status(403).json({ message: "Farm Name Already Exist" });
       }
-      req.body.userId = req.userId; 
+      req.body.userId = req.userId;
       const farm = await this.farmService.create(req.body);
       return res.status(200).json({ message: "New Farm Created!", farm });
     } catch (error: any) {

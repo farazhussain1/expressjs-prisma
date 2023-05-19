@@ -30,7 +30,7 @@ export class FarmService {
                 },
               },
             },
-            _count: true,
+
           },
         },
         Ration: true,

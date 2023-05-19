@@ -41,7 +41,7 @@ export class RationHandler {
       farmId: JOI.number().required(),
       rationCategory: JOI.string().required(),
       quantity: JOI.number().required(),
-      purchaseDate: JOI.date().iso().required()
+      purchaseDate: JOI.date().iso().optional()
     }).validate(req.body, { abortEarly: false })
     if (validation.error) {
       return error("validationError", validation, res)

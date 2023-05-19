@@ -5,11 +5,12 @@ import { error } from "../helpers/errorHelper";
 import multer from "multer";
 import storage from "../middleware/multerUpload";
 import { uploadFile } from "../helpers/formidable";
+import { CattleStatus } from "@prisma/client";
 
 const upload = multer({ storage: storage });
 
 export class CattleHandler {
-  constructor(private cattleService: CattleService = new CattleService()) {}
+  constructor(private cattleService: CattleService = new CattleService()) { }
 
   async getCattleStatus(req: Request, res: Response) {
     return res.status(200).json({
@@ -64,6 +65,7 @@ export class CattleHandler {
         dob: JOI.date().iso().required(),
         cattleStatus: JOI.optional(),
         vaccinated: JOI.boolean().required(),
+        vacinationDate: JOI.date().iso().optional(),
         image: JOI.optional(),
       })
       .validate(req.body, { abortEarly: true });
@@ -72,6 +74,16 @@ export class CattleHandler {
     }
 
     try {
+      const cattleStatus = req.body.cattleStatus;
+      const isCattleStatus = cattleStatus.map((c: any) => {
+        console.log(c);
+        if (c != "heifer" && c != "sick") {
+          return res
+            .status(400)
+            .json({ message: `${c} is not a valid option` });
+        }
+      });
+
       const isFarm = await this.cattleService.isUserFarms(
         +req.body.farmId,
         req.userId
