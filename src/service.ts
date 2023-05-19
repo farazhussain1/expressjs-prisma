@@ -55,4 +55,25 @@ export class UserService {
       data: data,
     });
   }
+
+  getAll(query: string) {
+    console.log(query);
+
+    return prisma.user.findMany({
+      where: {
+        OR: [
+          { email: { contains: query, mode: "insensitive" } },
+          { username: { contains: query, mode: "insensitive" } },
+          { number: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      select: {
+        id: true,
+        email: true,
+        number: true,
+        username: true,
+        Profile: true,
+      },
+    });
+  }
 }
