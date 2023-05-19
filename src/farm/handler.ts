@@ -14,11 +14,15 @@ export class FarmController {
         farm.totalMilkYield = 0;
         farm.bestPerformer = 0
         farm.bestPerformerId = {}
+        farm.worstPerformer = 99999
+        farm.worstPerformerId = {}
         farm.Cattle.map((cattle: any) => {
           cattle.totalMilkYield = 0;
           cattle.MilkYield.map((milkYield: any) => cattle.totalMilkYield += Number(milkYield.milkInLitres));
           farm.bestPerformerId = cattle.totalMilkYield > farm.bestPerformer ? cattle : farm.bestPerformerId
           farm.bestPerformer = cattle.totalMilkYield > farm.bestPerformer ? cattle.totalMilkYield : farm.bestPerformer
+          farm.worstPerformerId = cattle.totalMilkYield < farm.worstPerformer ? cattle : farm.worstPerformerId
+          farm.worstPerformer = cattle.totalMilkYield < farm.worstPerformer ? cattle.totalMilkYield : farm.worstPerformer
           farm.totalMilkYield += cattle.totalMilkYield;
         });
       });
@@ -38,11 +42,15 @@ export class FarmController {
       farm.totalMilkYield = 0
       farm.bestPerformer = 0
       farm.bestPerformerId = {}
+      farm.worstPerformer = 99999
+      farm.worstPerformerId = {}
       farm?.Cattle.map((cattle: any) => {
         cattle.totalMilkYield = 0;
         cattle.MilkYield.map((milkYield: any) => cattle.totalMilkYield += Number(milkYield.milkInLitres));
         farm.bestPerformerId = cattle.totalMilkYield > farm.bestPerformer ? cattle : farm.bestPerformerId
         farm.bestPerformer = cattle.totalMilkYield > farm.bestPerformer ? cattle.totalMilkYield : farm.bestPerformer
+        farm.worstPerformerId = cattle.totalMilkYield < farm.worstPerformer ? cattle : farm.worstPerformerId
+        farm.worstPerformer = cattle.totalMilkYield < farm.worstPerformer ? cattle.totalMilkYield : farm.worstPerformer
         farm.totalMilkYield = farm.totalMilkYield + cattle.totalMilkYield
       });
 

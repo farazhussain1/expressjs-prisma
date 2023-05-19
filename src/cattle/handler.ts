@@ -75,14 +75,23 @@ export class CattleHandler {
 
     try {
       const cattleStatus = req.body.cattleStatus;
-      const isCattleStatus = cattleStatus.map((c: any) => {
-        console.log(c);
-        if (c != "heifer" && c != "sick") {
+      const typeCattleStatus = typeof cattleStatus
+      if (typeCattleStatus === "object" && Array.isArray(cattleStatus)) {
+        cattleStatus?.map((c: any) => {
+          if (c != "heifer" && c != "sick" && c != "milking" && c != "pregnant" && c != "dry") {
+            return res
+              .status(400)
+              .json({ message: `${c} is not a valid option` });
+          }
+        });
+      }
+      else{
+        if (cattleStatus != "heifer" && cattleStatus != "sick" && cattleStatus != "milking" && cattleStatus != "pregnant" && cattleStatus != "dry") {
           return res
             .status(400)
-            .json({ message: `${c} is not a valid option` });
+            .json({ message: `${cattleStatus} is not a valid option` });
         }
-      });
+      }
 
       const isFarm = await this.cattleService.isUserFarms(
         +req.body.farmId,
