@@ -146,7 +146,7 @@ export class UserController {
   async resetPassword(req: Request, res: Response) {
     try {
       const token = req.query.token?.toString() ?? "";
-      const filepath = path.join(__dirname, "..", "/templates/password.html");
+      const filepath = path.join(__dirname, "..","..", "/templates/password.html");
       const data = await readFile(filepath, { encoding: "utf-8" });
       const newdata = data.replace("{{token}}", token);
       return res.send(newdata);
