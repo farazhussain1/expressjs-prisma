@@ -2,7 +2,12 @@ import { PrismaClient, User, Chat, Message } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class ChatService {
-  constructor() {}
+  constructor() { }
+
+  async isExist(data: any) {
+    
+
+  }
 
   async saveMessage(data: any) {
     data.to = +data.to;
