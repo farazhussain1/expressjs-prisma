@@ -184,6 +184,10 @@ export class UserController {
         return res.status(400).json({ message: "invalid User" });
       }
 
+      user.country = user.Profile.country
+      user.image = user.Profile.image
+
+      delete user.Profile
       return res.status(200).json({ message: "User updated!", user });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
