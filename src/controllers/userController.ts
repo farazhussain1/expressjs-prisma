@@ -186,6 +186,7 @@ export class UserController {
 
       user.country = user.Profile.country
       user.image = user.Profile.image
+      user.token = req.headers.cookie
 
       delete user.Profile
       return res.status(200).json({ message: "User updated!", user });
