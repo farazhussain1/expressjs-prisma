@@ -88,10 +88,22 @@ export class UserService {
   }
 
   updateProfile(id: number, data: any) {
-    return prisma.profile.update({
-      where: { userId: id },
-      data: data
-
+    return prisma.user.update({
+      where: { id: id },
+      select: {
+        id: true, username: true, email: true, number: true, isVerified: true, createdAt: true, updatedAt: true,
+        Profile: true
+      },
+      data: {
+        username: data.username,
+        number: data.number,
+        Profile: {
+          update: {
+            country: data.country,
+            image: data.image
+          }
+        }
+      }
     })
   }
 }

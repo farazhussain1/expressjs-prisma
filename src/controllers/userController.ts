@@ -169,10 +169,8 @@ export class UserController {
     const validation = JOI.object()
       .keys({
         username: JOI.string().optional(),
+        number: JOI.string().optional(),
         country: JOI.string().optional(),
-        state: JOI.string().optional(),
-        city: JOI.string().optional(),
-        district: JOI.string().optional(),
         image: JOI.optional(),
       })
       .validate(req.body, { abortEarly: true });
@@ -181,17 +179,12 @@ export class UserController {
     }
 
     try {
-
-      // const user = await this.userService.getById(req.userId)
-      // console.log(user);
-      // const id = user?.Profile?.id
-
-      const updateUser = await this.userService.updateProfile(req.userId, req.body)
-      if (!updateUser) {
+      const user: any = await this.userService.updateProfile(req.userId, req.body)
+      if (!user) {
         return res.status(400).json({ message: "invalid User" });
       }
 
-      return res.status(200).json({ message: "User updated!", updateUser });
+      return res.status(200).json({ message: "User updated!", user });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
     }
