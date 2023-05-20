@@ -1,8 +1,9 @@
 import { PrismaClient, User } from "@prisma/client";
+import { any } from "joi";
 const prisma = new PrismaClient();
 
 export class UserService {
-  constructor() {}
+  constructor() { }
 
   get(data: User) {
     return prisma.user.findFirst({
@@ -75,5 +76,22 @@ export class UserService {
         Profile: true,
       },
     });
+  }
+
+  getById(id: number) {
+    return prisma.user.findFirst({
+      where: { id: id },
+      select: {
+        Profile: true
+      }
+    })
+  }
+
+  updateProfile(id: number, data: any) {
+    return prisma.profile.update({
+      where: { userId: id },
+      data: data
+
+    })
   }
 }

@@ -9,6 +9,8 @@ import { envConfig } from "../config/envConfig";
 import { UserService } from "../service";
 import path from "path";
 import { readFile } from "fs/promises";
+import { uploadFile } from "../helpers/formidable";
+import { error } from "../helpers/errorHelper";
 export class UserController {
   private forgetPasswordData: any;
   private userService: UserService;
@@ -146,12 +148,52 @@ export class UserController {
   async resetPassword(req: Request, res: Response) {
     try {
       const token = req.query.token?.toString() ?? "";
-      const filepath = path.join(__dirname, "..","..", "/templates/password.html");
+      const filepath = path.join(__dirname, "..", "..", "/templates/password.html");
       const data = await readFile(filepath, { encoding: "utf-8" });
       const newdata = data.replace("{{token}}", token);
       return res.send(newdata);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async update(req: Request, res: Response) {
+    console.log(req.userId, "here");
+
+    try {
+      req.body = await uploadFile(req, "public/profileImg");
+    } catch (error) {
+      console.log({ error: error });
+    }
+
+    const validation = JOI.object()
+      .keys({
+        username: JOI.string().optional(),
+        country: JOI.string().optional(),
+        state: JOI.string().optional(),
+        city: JOI.string().optional(),
+        district: JOI.string().optional(),
+        image: JOI.optional(),
+      })
+      .validate(req.body, { abortEarly: true });
+    if (validation.error) {
+      return error("validationError", validation, res);
+    }
+
+    try {
+
+      // const user = await this.userService.getById(req.userId)
+      // console.log(user);
+      // const id = user?.Profile?.id
+
+      const updateUser = await this.userService.updateProfile(req.userId, req.body)
+      if (!updateUser) {
+        return res.status(400).json({ message: "invalid User" });
+      }
+
+      return res.status(200).json({ message: "User updated!", updateUser });
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
   }
 }

@@ -2,6 +2,7 @@ import express from "express";
 import { AuthController } from "../controllers/authController";
 import { UserController } from "../controllers/userController";
 import { UserService } from "../service";
+import { AuthMap } from "../middleware/Auth";
 
 export const userRouter = express.Router();
 
@@ -20,6 +21,8 @@ userRouter.post("/forgotPassword", user.forgotPassword.bind(user));
 
 userRouter.post("/changePassword", user.changePassword.bind(user));
 
+userRouter.get("/changePassword", user.resetPassword.bind(user))
+
 userRouter.get("/users", user.getAll.bind(user));
 
-userRouter.get("/changePassword",user.resetPassword.bind(user))
+userRouter.post("/update", AuthMap, user.update.bind(user));
