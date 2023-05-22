@@ -28,7 +28,7 @@ form.addEventListener("submit", (e) => {
   
   append(`You : ${message}`, "right");
   console.log(message, to, from);
-  socket.emit("message", { message, to, from });
+  socket.emit("message", { message, to });
   messageInput.value = "";
   recieverInut.value = "";
 });

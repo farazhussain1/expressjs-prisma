@@ -1,17 +1,12 @@
-import { PrismaClient, User, Chat, Message } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class ChatService {
   constructor() { }
 
-  async isExist(data: any) {
-    
-
-  }
-
   async saveMessage(data: any) {
     data.to = +data.to;
-    const isExists = await prisma.chat.findFirst({
+    const isChat = await prisma.chat.findFirst({
       where: {
         OR: [
           { from: data.from, to: data.to },
@@ -20,13 +15,13 @@ export class ChatService {
       },
     });
 
-    if (isExists) {
+    if (isChat) {
       return await prisma.message.create({
         data: {
           from: data.from,
           to: +data.to,
           message: data.message,
-          chatId: isExists.id,
+          chatId: isChat.id,
         },
       });
     }

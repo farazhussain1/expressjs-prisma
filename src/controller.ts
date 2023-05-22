@@ -8,7 +8,7 @@ import { envConfig } from "./config/envConfig";
 import { transport } from "./config/mail.config";
 import JOI from "joi";
 import { error } from "./helpers/errorHelper";
-import { log } from "util";
+
 export class ChatController {
   constructor(private chatService: ChatService) { }
 
@@ -26,7 +26,6 @@ export class ChatController {
         delete chat.sender;
       }
       chat.user.lastMessage = chat.Message[chat.Message.length - 1].createdAt
-      console.log(chat.user.id, chat.Message.length - 1, chat.Message[chat.Message.length - 1].createdAt)
       chat.messages = chat.Message;
       delete chat.Message;
     });
@@ -42,11 +41,7 @@ export class ChatController {
       userId: req.userId,
     });
     const filePath = join(__dirname, '/jobs/alerts.json')
-    console.log(filePath);
-
     writeFileSync(filePath, JSON.stringify(alerts));
-    console.log(alerts);
-
     return res.status(200).json({ message: "done" });
   }
 
