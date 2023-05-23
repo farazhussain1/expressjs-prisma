@@ -1,14 +1,11 @@
 import { Request, Response, response } from "express";
 import { ChatService } from "./service";
-import { request } from "http";
 import alerts from "./jobs/alerts.json";
 import { writeFileSync } from "fs";
 import { join } from "path";
-import { envConfig } from "./config/envConfig";
 import { transport } from "./config/mail.config";
 import JOI from "joi";
 import { error } from "./helpers/errorHelper";
-import { log } from "util";
 export class ChatController {
   constructor(private chatService: ChatService) { }
 
