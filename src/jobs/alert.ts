@@ -1,13 +1,13 @@
-import { schedule, ScheduleOptions } from "node-cron";
+import { schedule, getTasks, validate } from "node-cron";
+import { isToday } from "../helpers/date";
 import { CattleAlert } from "../model";
 import { onlineUsers } from "../socketServer";
 import allAlerts from "./alerts.json";
 
-const alerts: CattleAlert[] = allAlerts;
 
-const job = schedule(
-  "* * * * * *",
-  (data:any) => {
+const alerts: CattleAlert[] = allAlerts;
+export const job = schedule("0 */1 * * *", (data) => {
+    console.log(data.toLocaleString());
     const todayAlerts = alerts.filter((alert) => isToday(alert.dateTime));
     todayAlerts.forEach((alert) => {
       onlineUsers[alert.userId].socket?.emit("alert", {
@@ -15,21 +15,8 @@ const job = schedule(
       });
     });
   },
-  { name: "Alert Scheduler" }
+  { name: "Alerts Scheduler" }
 );
-
-console.log(job.start());
-
-function isToday(_date: string) {
-  const year = new Date(_date).getFullYear();
-  const month = new Date(_date).getMonth();
-  const date = new Date(_date).getDate();
-
-  const todayDate = Date.UTC(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate()
-  );
-  const givenDate = Date.UTC(year, month, date);
-  return todayDate == givenDate;
-}
+job.start()
+console.log('Jobs scheduler started....');
+console.table(getTasks())

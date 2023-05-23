@@ -1,11 +1,12 @@
-import { Request, Response, response } from "express";
+import { Request, Response } from "express";
 import { ChatService } from "./service";
 import alerts from "./jobs/alerts.json";
-import { writeFileSync } from "fs";
 import { join } from "path";
 import { transport } from "./config/mail.config";
 import JOI from "joi";
 import { error } from "./helpers/errorHelper";
+import { writeFile } from "fs/promises";
+
 export class ChatController {
   constructor(private chatService: ChatService) { }
 
@@ -23,7 +24,6 @@ export class ChatController {
         delete chat.sender;
       }
       chat.user.lastMessage = chat.Message[chat.Message.length - 1].createdAt
-      console.log(chat.user.id, chat.Message.length - 1, chat.Message[chat.Message.length - 1].createdAt)
       chat.messages = chat.Message;
       delete chat.Message;
     });
@@ -39,11 +39,7 @@ export class ChatController {
       userId: req.userId,
     });
     const filePath = join(__dirname, '/jobs/alerts.json')
-    console.log(filePath);
-
-    writeFileSync(filePath, JSON.stringify(alerts));
-    console.log(alerts);
-
+    writeFile(filePath, JSON.stringify(alerts));
     return res.status(200).json({ message: "done" });
   }
 
@@ -51,32 +47,15 @@ export class ChatController {
     try {
       const details = req.body;
       console.log(details);
-      const validation = JOI.object()
-        .keys({
+      const validation = JOI.object().keys({
           username: JOI.string().required(),
           email: JOI.string().required().email(),
           message: JOI.string().required(),
-        })
-        .validate(req.body, { abortEarly: false });
-
-      // validation.error?.details.forEach((element) => {
-      //   console.log(element.message);
-      // });
+        }).validate(req.body, { abortEarly: false });
 
       if (validation.error) {
         return error("validationError", validation, res);
       }
-
-
-      // const existingUser = await this.chatService.isExists(email);
-      // if (existingUser) {
-      //   return res.status(400).json({ message: "User already exists" });
-      // }
-      // const existingNumber = await userService.isExists(number);
-      // if (existingNumber) {
-      //   return res.status(400).json({ message: "Number Already In use" });
-      // }
-
 
       const info = await transport.sendMail({
         from: `<${details.email}>`,
@@ -95,8 +74,8 @@ export class ChatController {
         message: `Your query sent to support team shortly you will get a reply`,
         details,
       });
-    } catch (error: any) {
-      return res.status(500).json({ message: error.message });
+    } catch (err: any) {
+      return error("catchError",err,res)
     }
   }
 }

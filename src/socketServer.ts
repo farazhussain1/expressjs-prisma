@@ -6,6 +6,7 @@ import { httpServer } from ".";
 
 
 export const onlineUsers: OnlineUsers = {};
+
 const socketServer = new Server(httpServer, { cors: { origin: "*" } });
 const { saveMessage } = new ChatService();
 
