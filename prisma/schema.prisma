@@ -6,7 +6,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["Auth", "Chat"]
+  schemas  = ["Auth", "Chat", "Event"]
 }
 
 model Chat {
@@ -36,9 +36,29 @@ model Message {
   @@schema("Chat")
 }
 
+model Events {
+  id         Int         @id @default(autoincrement())
+  cattleId   Int?
+  cattleName String
+  dateTime   DateTime
+  message    String
+  userId     Int?
+  status     EventStatus @default(Pending)
+  User       User?       @relation(fields: [userId], references: [id])
+
+  @@schema("Event")
+}
+
+enum EventStatus {
+  Pending
+  Done
+  Cancel
+
+  @@schema("Event")
+}
+
 model Profile {
   id        Int      @id @default(autoincrement())
-  number    String?
   country   String
   state     String?
   city      String?
@@ -57,12 +77,14 @@ model User {
   username      String
   email         String   @unique
   password      String
+  number        String   @unique
   isVerified    Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime
   Profile       Profile?
   chatsSent     Chat[]   @relation("Sender")
   chatsReceived Chat[]   @relation("Recipient")
+  events        Events[]
 
   @@schema("Auth")
 }

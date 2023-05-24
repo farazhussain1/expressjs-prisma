@@ -1,6 +1,9 @@
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "Auth";
 
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "Event";
+
 -- CreateTable
 CREATE TABLE "Chat"."Chat" (
     "id" SERIAL NOT NULL,
@@ -26,9 +29,20 @@ CREATE TABLE "Chat"."Message" (
 );
 
 -- CreateTable
+CREATE TABLE "Event"."Events" (
+    "id" SERIAL NOT NULL,
+    "cattleId" INTEGER,
+    "cattleName" TEXT NOT NULL,
+    "dateTime" TIMESTAMP(3) NOT NULL,
+    "message" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+
+    CONSTRAINT "Events_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Auth"."Profile" (
     "id" SERIAL NOT NULL,
-    "number" TEXT,
     "country" TEXT NOT NULL,
     "state" TEXT,
     "city" TEXT,
@@ -47,6 +61,7 @@ CREATE TABLE "Auth"."User" (
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "number" TEXT NOT NULL,
     "isVerified" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -62,6 +77,9 @@ CREATE UNIQUE INDEX "Profile_userId_key" ON "Auth"."Profile"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "Auth"."User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_number_key" ON "Auth"."User"("number");
 
 -- AddForeignKey
 ALTER TABLE "Chat"."Chat" ADD CONSTRAINT "Chat_from_fkey" FOREIGN KEY ("from") REFERENCES "Auth"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

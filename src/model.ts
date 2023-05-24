@@ -19,6 +19,7 @@ export interface OnlineUsers {
 }
 
 export interface CattleAlert {
+  id: number;
   userId: number;
   message: string;
   cattleId: number;

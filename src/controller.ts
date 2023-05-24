@@ -30,18 +30,19 @@ export class ChatController {
     return res.status(200).json({ message: "Retrieved Messages", data: chats });
   }
 
-  async createAlert(req: Request, res: Response) {
-    alerts.push({
-      cattleId: req.body.cattleId,
-      cattleName: req.body.cattleName,
-      dateTime: req.body.dateTime,
-      message: req.body.message,
-      userId: req.userId,
-    });
-    const filePath = join(__dirname, '/jobs/alerts.json')
-    writeFile(filePath, JSON.stringify(alerts));
-    return res.status(200).json({ message: "done" });
-  }
+  // async createAlert(req: Request, res: Response) {
+  //   alerts.push({
+  //     cattleId: req.body.cattleId,
+  //     cattleName: req.body.cattleName,
+  //     dateTime: req.body.dateTime,
+  //     message: req.body.message,
+  //     userId: req.userId,
+  //   });
+  //   const event = 
+  //   const filePath = join(__dirname, '/jobs/alerts.json')
+  //   writeFile(filePath, JSON.stringify(alerts));
+  //   return res.status(200).json({ message: "done" });
+  // }
 
   async contactUs(req: Request, res: Response) {
     try {
