@@ -6,6 +6,7 @@ import { transport } from "./config/mail.config";
 import JOI from "joi";
 import { error } from "./helpers/errorHelper";
 import { writeFile } from "fs/promises";
+import { log } from "console";
 
 export class ChatController {
   constructor(private chatService: ChatService) { }
@@ -13,6 +14,8 @@ export class ChatController {
   async get(req: Request, res: Response) {
     console.log(req.userId);
     const chats = await this.chatService.get(req.userId);
+    console.log(chats);
+
     chats.map((chat: any) => {
       if (chat.recipient.id == req.userId) {
         chat.user = chat.sender;
@@ -49,10 +52,10 @@ export class ChatController {
       const details = req.body;
       console.log(details);
       const validation = JOI.object().keys({
-          username: JOI.string().required(),
-          email: JOI.string().required().email(),
-          message: JOI.string().required(),
-        }).validate(req.body, { abortEarly: false });
+        username: JOI.string().required(),
+        email: JOI.string().required().email(),
+        message: JOI.string().required(),
+      }).validate(req.body, { abortEarly: false });
 
       if (validation.error) {
         return error("validationError", validation, res);
@@ -76,7 +79,7 @@ export class ChatController {
         details,
       });
     } catch (err: any) {
-      return error("catchError",err,res)
+      return error("catchError", err, res)
     }
   }
 }

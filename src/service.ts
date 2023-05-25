@@ -46,8 +46,12 @@ export class ChatService {
         OR: [{ from: id }, { to: id }],
       },
       select: {
-        from: true,
-        to: true,
+        recipient: {
+          select: { id: true, username: true, email: true },
+        },
+        sender: {
+          select: { id: true, username: true, email: true },
+        },
         Message: true,
       },
     });
