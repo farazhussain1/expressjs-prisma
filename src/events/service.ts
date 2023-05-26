@@ -21,10 +21,10 @@ export class EventsService {
     });
   }
 
-  getById(id: number, userId: number) {
-    return prisma.events.findFirst({
+  getById(cattleId: number, userId: number) {
+    return prisma.events.findMany({
       where: {
-        id,
+        cattleId: cattleId,
         userId: userId,
       },
     });
