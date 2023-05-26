@@ -13,18 +13,28 @@ export class EventsService {
   //   });
   // }
 
-  get(userId: number) {
+  get(userId: number, data: any) {
+    console.log(data);
+    if (data) {
+      console.log("here");
+      return prisma.events.findMany({
+        where: {
+          userId: userId,
+          OR: [{ cattleId: Number(data.cattleId) || 0 }, { status: data.status || 'Pending'}]
+        },
+      });
+    }
     return prisma.events.findMany({
       where: {
-        userId: userId,
+        userId: userId
       },
     });
   }
 
-  getById(cattleId: number, userId: number) {
-    return prisma.events.findMany({
+  getById(id: number, userId: number) {
+    return prisma.events.findFirst({
       where: {
-        cattleId: cattleId,
+        id,
         userId: userId,
       },
     });

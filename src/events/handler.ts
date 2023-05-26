@@ -5,8 +5,6 @@ import alerts from "../jobs/alerts.json";
 import { writeFile } from "fs/promises";
 import { join } from "path";
 import { error } from "../helpers/errorHelper";
-import { CattleAlert } from "../model";
-
 
 export class EventsHandler {
 
@@ -15,7 +13,7 @@ export class EventsHandler {
   async get(req: Request, res: Response) {
     try {
       console.log(req.userId);
-      const events = await this.eventsService.get(req.userId)
+      const events = await this.eventsService.get(req.userId, req.query)
       return res.status(200).json({ message: "Success", events });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
@@ -40,6 +38,7 @@ export class EventsHandler {
       cattleName: JOI.string().required(),
       dateTime: JOI.date().iso().required(),
       message: JOI.string().required(),
+      status: JOI.string().optional().valid(...["Pending", "Done", "Cancel"])
     }).validate(req.body, { abortEarly: false })
     if (validation.error) {
       return error("validationError", validation, res)

@@ -22,7 +22,7 @@ app.use(AuthMap)
 app.use("/api/chats", apiRouter);
 app.use("/api/alerts", eventsRouter);
 
-export const httpServer = app.listen(Number(port), '0.0.0.0', () =>
+export const httpServer = app.listen(Number(port), () =>
   console.log("server is running at port " + port)
 );
 
